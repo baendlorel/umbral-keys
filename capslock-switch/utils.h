@@ -88,3 +88,14 @@ inline string keyName(int keycode) {
     }
   }
 }
+
+string join(string *arr, size_t length, string delimiter = ", ") {
+  string result;
+  for (size_t i = 0; i < length; i++) {
+    result += arr[i];
+    if (i < length - 1) {
+      result += delimiter; // 添加逗号和空格作为分隔符
+    }
+  }
+  return result;
+}
