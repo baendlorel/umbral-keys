@@ -1,45 +1,38 @@
-﻿// capslock-switch.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
-#include <Windows.h>
+﻿#include <Windows.h>
 #include <iostream>
 
-
-// 发送组合键（例如 Ctrl + Shift + A）
 void SendKeyCombo() {
-  INPUT inputs[4] = {}; // 定义输入结构体数组
+  INPUT inputs[3] = {};   // 定义输入结构体数组
+  INPUT releases[3] = {}; // 定义输入结构体数组
 
   // 模拟按下 Ctrl
   inputs[0].type = INPUT_KEYBOARD;
   inputs[0].ki.wVk = VK_CONTROL;
 
-  // 模拟按下 Shift
+  // 模拟按下 Space
   inputs[1].type = INPUT_KEYBOARD;
-  inputs[1].ki.wVk = VK_SHIFT;
+  inputs[1].ki.wVk = VK_SPACE;
 
-  // 模拟按下 A
-  inputs[2].type = INPUT_KEYBOARD;
-  inputs[2].ki.wVk = 'A';
-
-  // 释放 A
-  inputs[3].type = INPUT_KEYBOARD;
-  inputs[3].ki.wVk = 'A';
-  inputs[3].ki.dwFlags = KEYEVENTF_KEYUP;
-
-  // 释放 Shift
-  INPUT releaseShift = inputs[1];
-  releaseShift.ki.dwFlags = KEYEVENTF_KEYUP;
 
   // 释放 Ctrl
-  INPUT releaseCtrl = inputs[0];
-  releaseCtrl.ki.dwFlags = KEYEVENTF_KEYUP;
+  releases[0].type = INPUT_KEYBOARD;
+  releases[0].ki.wVk = VK_CONTROL;
+  releases[0].ki.dwFlags = KEYEVENTF_KEYUP;
+
+  // 释放 Space
+  releases[1].type = INPUT_KEYBOARD;
+  releases[1].ki.wVk = VK_SPACE;
+  releases[1].ki.dwFlags = KEYEVENTF_KEYUP;
+
 
   // 发送按键输入
-  SendInput(4, inputs, sizeof(INPUT));
+  SendInput(3, inputs, sizeof(INPUT));
+  std::cout << "combo sent" << std::endl;
 
   // 发送释放的按键
-  SendInput(1, &releaseShift, sizeof(INPUT));
-  SendInput(1, &releaseCtrl, sizeof(INPUT));
+  SendInput(3, releases, sizeof(INPUT));
+  std::cout << "combo released" << std::endl;
 }
-
 
 HHOOK keyboardHook;
 
@@ -55,11 +48,11 @@ LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
         i++;
         // CapsLock 键被按下时的自定义行为
         std::cout << "CapsLock Key Pressed! But we can change its behavior."
-                  << i << "th time"
-                  << std::endl;
+                  << i << "th time" << std::endl;
 
         // 你可以在这里自定义行为，比如禁用 CapsLock 键
         // 取消 CapsLock 的原始行为
+        SendKeyCombo();
         return 1; // 返回 1 会阻止 CapsLock 键的默认行为
       }
     }

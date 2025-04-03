@@ -24,6 +24,7 @@
     <ProjectGuid>{195d6d09-e009-4db6-8e48-9b0d5b5d19ea}</ProjectGuid>
     <RootNamespace>capslockswitch</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>umbral-keys</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -127,7 +128,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="capslock-switch.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="umbral-key.h" />
+    <ClCompile Include="umbral-key.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
