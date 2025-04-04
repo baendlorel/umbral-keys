@@ -2,7 +2,6 @@
 #include <Windows.h>
 #include <iostream>
 #include <map>
-#include "array.h"
 
 using namespace std;
 
@@ -12,8 +11,8 @@ class UmbralKey {
 public:
   static map<WORD, UmbralKey *> Instances;
   static HHOOK KeyboardHook;
-  static void initKeyboardHook();
-  static UmbralKey *add(const char *name, WORD origin_key, WORD *umbral_keys,
+  static void start();
+  static UmbralKey *add(const char *name, WORD origin, WORD *umbras,
                         int umbraSize);
 
 private:
@@ -24,15 +23,13 @@ private:
 
 private:
   WORD origin;
-  Array<WORD> umbras;
   int umbraSize;
   INPUT *umbralInput;
   INPUT *umbralRelease;
   string umbralMessage;
 
 private:
-  void init(string &name, WORD origin_key, WORD *umbral_keys,
-            int umbraSize);
+  void init(string &name, WORD origin, WORD *umbras, int umbraSize);
 
 public:
   void umbral();

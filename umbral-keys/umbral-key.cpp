@@ -25,11 +25,17 @@ LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 map<WORD, UmbralKey *> UmbralKey::Instances;
 HHOOK UmbralKey::KeyboardHook;
 
-void UmbralKey::initKeyboardHook() {
+void UmbralKey::start() {
   KeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, NULL, 0);
   if (KeyboardHook == NULL) {
-    std::cerr << "Failed to install keyboard hook!" << std::endl;
+    cerr << "Failed to install keyboard hook!" << endl;
     exit(1);
+  }
+
+  MSG msg;
+  while (GetMessage(&msg, NULL, 0, 0)) {
+    TranslateMessage(&msg);
+    DispatchMessage(&msg);
   }
 }
 
@@ -42,19 +48,18 @@ UmbralKey *UmbralKey::add(const char *name, WORD origin, WORD *umbras,
   return u;
 }
 
-// # 成员函数
 
+// 成员
 void UmbralKey::umbral() {
   count++;
 
   // 发送按键输入
-   SendInput(umbraSize, umbralInput, sizeof(INPUT));
+  SendInput(umbraSize, umbralInput, sizeof(INPUT));
 
   // 发送释放的按键
-   SendInput(umbraSize, umbralRelease, sizeof(INPUT));
+  SendInput(umbraSize, umbralRelease, sizeof(INPUT));
 
-  std::cout << "[" << name << "] combo sent " << count
-            << "th time: " << umbralMessage << std::endl;
+  cout << "[" << name << "].[" << count << "]" << umbralMessage << endl;
 }
 
 void UmbralKey::init(string &name, WORD origin, WORD *umbras, int umbraSize) {
@@ -70,10 +75,10 @@ void UmbralKey::init(string &name, WORD origin, WORD *umbras, int umbraSize) {
 
   // 设置原始按键
   this->umbraSize = umbraSize;
-  umbralInput = new INPUT[umbraSize];  
+  umbralInput = new INPUT[umbraSize];
   umbralRelease = new INPUT[umbraSize];
   // 必须全部初始化为0，否则SendInput将不会工作，但也不报错，就是无效
-  ZeroMemory(umbralInput, sizeof(INPUT) * umbraSize); 
+  ZeroMemory(umbralInput, sizeof(INPUT) * umbraSize);
   ZeroMemory(umbralRelease, sizeof(INPUT) * umbraSize);
 
   string *umbral_keys_name = new string[umbraSize];
@@ -94,6 +99,9 @@ void UmbralKey::init(string &name, WORD origin, WORD *umbras, int umbraSize) {
 
   umbralMessage = "'" + getKeyName(origin) + "' -> '" +
                   join(umbral_keys_name, umbraSize, " + ") + "'";
+
+  cout << "UmbralKey [" << this->name << ": " << umbralMessage
+       << "] is initialized successfully" << endl;
 }
 
 UmbralKey::UmbralKey() {
