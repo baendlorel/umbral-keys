@@ -7,7 +7,7 @@ int main() {
             << std::endl;
 
   UmbralKey::add("CapsLock", VK_CAPITAL, new int[2]{VK_CONTROL, VK_SPACE}, 2);
-  UmbralKey::initKeyboardHook();
+  UmbralKey::init_keyboard_hook();
 
   // 进入消息循环以捕获键盘事件
   MSG msg;
