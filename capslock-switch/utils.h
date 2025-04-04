@@ -24,7 +24,7 @@ inline string keyName(int keycode) {
   case VK_ESCAPE:
     return "Escape";
   case VK_SPACE:
-    return "Spacebar";
+    return "Space";
   case VK_PRIOR:
     return "Page Up";
   case VK_NEXT:
@@ -83,7 +83,7 @@ inline string keyName(int keycode) {
     } else {
       // For other keys, just convert to string
       char buffer[16];
-      sprintf(buffer, "%d", keycode);
+      sprintf_s(buffer, "%d", keycode);
       return string(buffer);
     }
   }

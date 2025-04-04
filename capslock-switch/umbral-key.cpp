@@ -11,12 +11,7 @@ LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
     }
 
     UmbralKey *u = UmbralKey::instances[pKeyboard->vkCode];
-    if (u == nullptr) {
-      // 没有找到对应的 UmbralKey 实例，继续传递事件
-      return CallNextHookEx(UmbralKey::keyboardHook, nCode, wParam, lParam);
-    }
-
-    if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
+    if (u != nullptr && (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)) {
       u->umbral();
       return 1; // 返回 1 会阻止 CapsLock 键的默认行为
     }
@@ -29,6 +24,7 @@ LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 // 静态成员
 
 map<DWORD, UmbralKey *> UmbralKey::instances;
+HHOOK UmbralKey::keyboardHook;
 
 void UmbralKey::initKeyboardHook() {
   keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, NULL, 0);
@@ -44,6 +40,7 @@ UmbralKey *UmbralKey::add(const char *name, int originKey, int *umbralKeys,
   string _name(name);
   u->init(_name, originKey, umbralKeys, umbralKeysLength);
   instances[originKey] = u; // 将实例添加到 map 中
+  return u;
 }
 
 // # 成员函数
@@ -51,10 +48,28 @@ UmbralKey *UmbralKey::add(const char *name, int originKey, int *umbralKeys,
 void UmbralKey::umbral() {
   count++;
 
+  //for (size_t i = 0; i < umbralKeysLength; i++) {
+  //  cout << "umbralKeysInput "<< keyName(umbralKeysInput[i].ki.wVk) << endl;
+  //}
+
+  //for (size_t i = 0; i < umbralKeysLength; i++) {
+  //  cout << "umbralKeysRelease " << keyName(umbralKeysRelease[i].ki.wVk) << endl;
+  //}
+
+
   // 发送按键输入
-  SendInput(umbralKeysLength, umbralKeysInput, sizeof(INPUT));
+  UINT sentInputs = SendInput(umbralKeysLength, umbralKeysInput, sizeof(INPUT));
+  if (sentInputs != umbralKeysLength) {
+    std::cerr << "Failed to send key inputs. Error: " << GetLastError()
+              << std::endl;
+  }
+
   // 发送释放的按键
-  SendInput(umbralKeysLength, umbralKeysRelease, sizeof(INPUT));
+  sentInputs = SendInput(umbralKeysLength, umbralKeysRelease, sizeof(INPUT));
+  if (sentInputs != umbralKeysLength) {
+    std::cerr << "Failed to send key releases. Error: " << GetLastError()
+              << std::endl;
+  }
 
   std::cout << "[" << name << "] combo sent " << count
             << "th time: " << umbralMessage << std::endl;

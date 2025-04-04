@@ -24,6 +24,9 @@
     <ClCompile Include="umbral-key.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="backup.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils.h">
