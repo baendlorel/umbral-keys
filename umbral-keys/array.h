@@ -51,7 +51,7 @@ public:
   void clear() { size = 0; }
 
   // 获取当前数组的长度
-  size_t size() const { return size; }
+  size_t getSize() const { return size; }
 
   T *to_array() const {
     // 返回一个新的数组，包含当前的元素

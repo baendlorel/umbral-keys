@@ -1,7 +1,7 @@
 #include "umbral-key.h"
 #include "utils.h"
 
-LRESULT CALLBACK keyboard_proc(int nCode, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
   if (nCode == HC_ACTION) {
     // 获取键盘事件
     KBDLLHOOKSTRUCT *pKeyboard = reinterpret_cast<KBDLLHOOKSTRUCT *>(lParam);
@@ -10,7 +10,7 @@ LRESULT CALLBACK keyboard_proc(int nCode, WPARAM wParam, LPARAM lParam) {
       return CallNextHookEx(NULL, nCode, wParam, lParam);
     }
 
-    UmbralKey *u = UmbralKey::instances[pKeyboard->vkCode];
+    UmbralKey *u = UmbralKey::Instances[pKeyboard->vkCode];
     if (u != nullptr && (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)) {
       u->umbral();
       return 1; // 返回 1 会阻止 CapsLock 键的默认行为
@@ -18,28 +18,27 @@ LRESULT CALLBACK keyboard_proc(int nCode, WPARAM wParam, LPARAM lParam) {
   }
 
   // 传递事件到下一个钩子链
-  return CallNextHookEx(UmbralKey::keyboard_hook, nCode, wParam, lParam);
+  return CallNextHookEx(UmbralKey::KeyboardHook, nCode, wParam, lParam);
 }
 
 // 静态成员
+map<WORD, UmbralKey *> UmbralKey::Instances;
+HHOOK UmbralKey::KeyboardHook;
 
-map<WORD, UmbralKey *> UmbralKey::instances;
-HHOOK UmbralKey::keyboard_hook;
-
-void UmbralKey::init_keyboard_hook() {
-  keyboard_hook = SetWindowsHookEx(WH_KEYBOARD_LL, keyboard_proc, NULL, 0);
-  if (keyboard_hook == NULL) {
+void UmbralKey::initKeyboardHook() {
+  KeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, NULL, 0);
+  if (KeyboardHook == NULL) {
     std::cerr << "Failed to install keyboard hook!" << std::endl;
     exit(1);
   }
 }
 
-UmbralKey *UmbralKey::add(const char *name, WORD origin_key, WORD *umbral_keys,
-                          int umbral_keys_size) {
+UmbralKey *UmbralKey::add(const char *name, WORD origin, WORD *umbras,
+                          int umbraSize) {
   UmbralKey *u = new UmbralKey();
   string _name(name);
-  u->init(_name, origin_key, umbral_keys, umbral_keys_size);
-  instances[origin_key] = u; // 将实例添加到 map 中
+  u->init(_name, origin, umbras, umbraSize);
+  Instances[origin] = u; // 将实例添加到 map 中
   return u;
 }
 
@@ -88,67 +87,68 @@ void UmbralKey::umbral() {
 
   //// 发送按键输入
   //SendInput(umbralKeysLength, umbralKeysInput, sizeof(INPUT));
-  std::cout << "umbralKeysLength: " << umbral_keys_size << std::endl;
+  std::cout << "umbralKeysLength: " << umbraSize << std::endl;
 
   //// 发送释放的按键
   //SendInput(umbralKeysLength, umbralKeysRelease, sizeof(INPUT));
 
   std::cout << "[" << name << "] combo sent " << count
-            << "th time: " << umbral_message << std::endl;
+            << "th time: " << umbralMessage << std::endl;
 }
 
-void UmbralKey::init(string &name, WORD origin_key, WORD *umbral_keys,
-                     int umbral_keys_size) {
-  if (is_ready) {
-    cout << "UmbralKey [" << this->name << ": " << umbral_message
+void UmbralKey::init(string &name, WORD origin, WORD *umbras,
+                     int umbraSize) {
+  if (isInited) {
+    cout << "UmbralKey [" << this->name << ": " << umbralMessage
          << "] is already initialized!" << endl;
     return;
   }
-  is_ready = true;
-  is_active = true;
+  isInited = true;
+  isActive = true;
   this->name = name;
   count = 0;
 
   // 设置原始按键
-  this->umbral_keys_size = umbral_keys_size;
-  umbral_input = new INPUT[umbral_keys_size];   // 定义输入结构体数组
-  umbral_release = new INPUT[umbral_keys_size]; // 定义输入结构体数组
-  string *umbral_keys_name = new string[umbral_keys_size];
+  this->umbraSize = umbraSize;
+  umbralInput = new INPUT[umbraSize];   // 定义输入结构体数组
+  umbralRelease = new INPUT[umbraSize]; // 定义输入结构体数组
+  string *umbral_keys_name = new string[umbraSize];
 
-  for (size_t i = 0; i < umbral_keys_size; i++) {
+  for (size_t i = 0; i < umbraSize; i++) {
     // 按下
-    umbral_input[i].type = INPUT_KEYBOARD;
-    umbral_input[i].ki.wVk = umbral_keys[i];
+    umbralInput[i].type = INPUT_KEYBOARD;
+    umbralInput[i].ki.wVk = umbras[i];
 
     // 释放
-    umbral_release[i].type = INPUT_KEYBOARD;
-    umbral_release[i].ki.wVk = umbral_keys[i];
-    umbral_release[i].ki.dwFlags = KEYEVENTF_KEYUP;
+    umbralRelease[i].type = INPUT_KEYBOARD;
+    umbralRelease[i].ki.wVk = umbras[i];
+    umbralRelease[i].ki.dwFlags = KEYEVENTF_KEYUP;
 
     // 键名
-    umbral_keys_name[i] = keyName(umbral_keys[i]); // 获取按键名称
+    umbral_keys_name[i] = getKeyName(umbras[i]); // 获取按键名称
   }
 
-  umbral_message = "'" + keyName(origin_key) + "' -> '" +
-                  join(umbral_keys_name, umbral_keys_size, " + ") + "'";
+  umbralMessage = "'" + getKeyName(origin) + "' -> '" +
+                  join(umbral_keys_name, umbraSize, " + ") + "'";
 }
 
 UmbralKey::UmbralKey() {
-  is_ready = false;
+  isActive = false;
+  isInited = false;
   name = "";
   count = 0;
 
-  origin_key = 0;
-  umbral_keys_size = 0;
-  umbral_input = nullptr;
-  umbral_release = nullptr;
+  origin = 0;
+  umbraSize = 0;
+  umbralInput = nullptr;
+  umbralRelease = nullptr;
 }
 
 UmbralKey::~UmbralKey() {
-  if (umbral_input != nullptr) {
-    delete[] umbral_input;
+  if (umbralInput != nullptr) {
+    delete[] umbralInput;
   }
-  if (umbral_release != nullptr) {
-    delete[] umbral_release;
+  if (umbralRelease != nullptr) {
+    delete[] umbralRelease;
   }
 }

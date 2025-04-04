@@ -2,34 +2,37 @@
 #include <Windows.h>
 #include <iostream>
 #include <map>
+#include "array.h"
+
 using namespace std;
 
-LRESULT CALLBACK keyboard_proc(int nCode, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
 
 class UmbralKey {
 public:
-  static map<WORD, UmbralKey *> instances;
-  static HHOOK keyboard_hook;
-  static void init_keyboard_hook();
+  static map<WORD, UmbralKey *> Instances;
+  static HHOOK KeyboardHook;
+  static void initKeyboardHook();
   static UmbralKey *add(const char *name, WORD origin_key, WORD *umbral_keys,
-                        int umbral_keys_size);
+                        int umbraSize);
 
 private:
-  bool is_ready;
-  bool is_active;
+  bool isInited;
+  bool isActive;
   string name;
   int count;
 
 private:
-  WORD origin_key;
-  WORD umbral_keys_size;
-  INPUT *umbral_input;
-  INPUT *umbral_release;
-  string umbral_message;
+  WORD origin;
+  Array<WORD> umbras;
+  int umbraSize;
+  INPUT *umbralInput;
+  INPUT *umbralRelease;
+  string umbralMessage;
 
 private:
   void init(string &name, WORD origin_key, WORD *umbral_keys,
-            int umbral_keys_size);
+            int umbraSize);
 
 public:
   void umbral();

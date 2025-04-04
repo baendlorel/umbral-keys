@@ -3,7 +3,7 @@
 #include <string>
 using namespace std;
 
-inline string keyName(int keycode) {
+inline string getKeyName(int keycode) {
   switch (keycode) {
   case VK_BACK:
     return "Backspace";
