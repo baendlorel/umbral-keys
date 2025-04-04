@@ -47,57 +47,17 @@ UmbralKey *UmbralKey::add(const char *name, WORD origin, WORD *umbras,
 void UmbralKey::umbral() {
   count++;
 
-  // for (size_t i = 0; i < umbralKeysLength; i++) {
-  //   cout << "umbralKeysInput "<< keyName(umbralKeysInput[i].ki.wVk) << endl;
-  // }
-
-  // for (size_t i = 0; i < umbralKeysLength; i++) {
-  //   cout << "umbralKeysRelease " << keyName(umbralKeysRelease[i].ki.wVk) <<
-  //   endl;
-  // }
-
-  INPUT inputs[2] = {};   // 定义输入结构体数组
-  INPUT releases[2] = {}; // 定义输入结构体数组
-
-  // 模拟按下 Ctrl
-  inputs[0].type = INPUT_KEYBOARD;
-  inputs[0].ki.wVk = VK_CONTROL;
-
-  // 模拟按下 Space
-  inputs[1].type = INPUT_KEYBOARD;
-  inputs[1].ki.wVk = VK_SPACE;
-
-  // 释放 Ctrl
-  releases[0].type = INPUT_KEYBOARD;
-  releases[0].ki.wVk = VK_CONTROL;
-  releases[0].ki.dwFlags = KEYEVENTF_KEYUP;
-
-  // 释放 Space
-  releases[1].type = INPUT_KEYBOARD;
-  releases[1].ki.wVk = VK_SPACE;
-  releases[1].ki.dwFlags = KEYEVENTF_KEYUP;
-
   // 发送按键输入
-  SendInput(2, inputs, sizeof(INPUT));
-  std::cout << "combo sent" << std::endl;
+   SendInput(umbraSize, umbralInput, sizeof(INPUT));
 
   // 发送释放的按键
-  SendInput(2, releases, sizeof(INPUT));
-  std::cout << "combo released" << std::endl;
-
-  //// 发送按键输入
-  //SendInput(umbralKeysLength, umbralKeysInput, sizeof(INPUT));
-  std::cout << "umbralKeysLength: " << umbraSize << std::endl;
-
-  //// 发送释放的按键
-  //SendInput(umbralKeysLength, umbralKeysRelease, sizeof(INPUT));
+   SendInput(umbraSize, umbralRelease, sizeof(INPUT));
 
   std::cout << "[" << name << "] combo sent " << count
             << "th time: " << umbralMessage << std::endl;
 }
 
-void UmbralKey::init(string &name, WORD origin, WORD *umbras,
-                     int umbraSize) {
+void UmbralKey::init(string &name, WORD origin, WORD *umbras, int umbraSize) {
   if (isInited) {
     cout << "UmbralKey [" << this->name << ": " << umbralMessage
          << "] is already initialized!" << endl;
@@ -110,8 +70,12 @@ void UmbralKey::init(string &name, WORD origin, WORD *umbras,
 
   // 设置原始按键
   this->umbraSize = umbraSize;
-  umbralInput = new INPUT[umbraSize];   // 定义输入结构体数组
-  umbralRelease = new INPUT[umbraSize]; // 定义输入结构体数组
+  umbralInput = new INPUT[umbraSize];  
+  umbralRelease = new INPUT[umbraSize];
+  // 必须全部初始化为0，否则SendInput将不会工作，但也不报错，就是无效
+  ZeroMemory(umbralInput, sizeof(INPUT) * umbraSize); 
+  ZeroMemory(umbralRelease, sizeof(INPUT) * umbraSize);
+
   string *umbral_keys_name = new string[umbraSize];
 
   for (size_t i = 0; i < umbraSize; i++) {
