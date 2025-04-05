@@ -1,6 +1,25 @@
 #include "umbral-key.h"
 #include "utils.h"
 
+INPUT *createInputArray(size_t size) {
+  INPUT *arr = new INPUT[size];
+  for (size_t i = 0; i < size; ++i) {
+    // 清空输入数组中的每个元素
+    arr[i] = {0}; // C++11初始化，清零所有成员
+
+    // 设置每个 INPUT 的 type 为 KEYBOARD 输入
+    arr[i].type = INPUT_KEYBOARD;
+
+    // 初始化 KEYBDINPUT
+    arr[i].ki.wVk = 0;         // 虚拟键码（0 表示没有特定键）
+    arr[i].ki.wScan = 0;       // 扫描码
+    arr[i].ki.dwFlags = 0;     // 不设置标志，表示按下
+    arr[i].ki.time = 0;        // 设置为 0（系统自动处理时间戳）
+    arr[i].ki.dwExtraInfo = 0; // 无附加信息
+  }
+  return arr;
+}
+
 LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
   if (nCode == HC_ACTION) {
     // 获取键盘事件
@@ -10,7 +29,7 @@ LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
       return CallNextHookEx(NULL, nCode, wParam, lParam);
     }
 
-    UmbralKey *u = UmbralKey::Instances[pKeyboard->vkCode];
+    UmbralKey *u = UmbralKey::Instances[(WORD)(pKeyboard->vkCode & 0xFFFF)];
     if (u != nullptr && (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)) {
       u->umbral();
       return 1; // 返回 1 会阻止 CapsLock 键的默认行为
@@ -22,7 +41,7 @@ LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 }
 
 // 静态成员
-map<WORD, UmbralKey *> UmbralKey::Instances;
+unordered_map<WORD, UmbralKey *> UmbralKey::Instances;
 HHOOK UmbralKey::KeyboardHook;
 
 void UmbralKey::start() {
@@ -48,7 +67,6 @@ UmbralKey *UmbralKey::add(const char *name, WORD origin, WORD *umbras,
   return u;
 }
 
-
 // 成员
 void UmbralKey::umbral() {
   count++;
@@ -59,7 +77,7 @@ void UmbralKey::umbral() {
   // 发送释放的按键
   SendInput(umbraSize, umbralRelease, sizeof(INPUT));
 
-  cout << "[" << name << "].[" << count << "]" << umbralMessage << endl;
+  cout << "[" << name << "] " << count << "th: " << umbralMessage << endl;
 }
 
 void UmbralKey::init(string &name, WORD origin, WORD *umbras, int umbraSize) {
@@ -75,30 +93,26 @@ void UmbralKey::init(string &name, WORD origin, WORD *umbras, int umbraSize) {
 
   // 设置原始按键
   this->umbraSize = umbraSize;
-  umbralInput = new INPUT[umbraSize];
-  umbralRelease = new INPUT[umbraSize];
-  // 必须全部初始化为0，否则SendInput将不会工作，但也不报错，就是无效
-  ZeroMemory(umbralInput, sizeof(INPUT) * umbraSize);
-  ZeroMemory(umbralRelease, sizeof(INPUT) * umbraSize);
+  // 必须全部好好地初始化，否则SendInput将不会工作，但也不报错，就是无效
+  umbralInput = createInputArray(umbraSize);
+  umbralRelease = createInputArray(umbraSize);
 
-  string *umbral_keys_name = new string[umbraSize];
+  string *names = new string[umbraSize];
 
   for (size_t i = 0; i < umbraSize; i++) {
     // 按下
-    umbralInput[i].type = INPUT_KEYBOARD;
     umbralInput[i].ki.wVk = umbras[i];
 
     // 释放
-    umbralRelease[i].type = INPUT_KEYBOARD;
     umbralRelease[i].ki.wVk = umbras[i];
     umbralRelease[i].ki.dwFlags = KEYEVENTF_KEYUP;
 
     // 键名
-    umbral_keys_name[i] = getKeyName(umbras[i]); // 获取按键名称
+    names[i] = getKeyName(umbras[i]); // 获取按键名称
   }
 
   umbralMessage = "'" + getKeyName(origin) + "' -> '" +
-                  join(umbral_keys_name, umbraSize, " + ") + "'";
+                  join(names, umbraSize, " + ") + "'";
 
   cout << "UmbralKey [" << this->name << ": " << umbralMessage
        << "] is initialized successfully" << endl;

@@ -1,9 +1,10 @@
 #pragma once
 #include <Windows.h>
+#include <unordered_map>
 #include <string>
 using namespace std;
 
-inline string getKeyName(int keycode) {
+inline string getKeyName(WORD keycode) {
   switch (keycode) {
   case VK_BACK:
     return "Backspace";
@@ -86,6 +87,50 @@ inline string getKeyName(int keycode) {
       sprintf_s(buffer, "%d", keycode);
       return string(buffer);
     }
+  }
+}
+
+inline WORD getKeyCode(const char* keyname) {
+  std::string kn = keyname;
+  for (char &c : kn) {
+    c = std::tolower(c);
+  }
+
+  if (kn.size() == 1) {
+    char c = kn[0];
+    if (c >= 'a' && c <= 'z')
+      return static_cast<WORD>(std::toupper(c));
+    if (c >= '0' && c <= '9')
+      return static_cast<WORD>(c);
+  }
+
+  static const std::unordered_map<std::string, WORD> keyMap = {
+      {"enter", VK_RETURN},   {"esc", VK_ESCAPE},
+      {"space", VK_SPACE},    {"tab", VK_TAB},
+      {"shift", VK_SHIFT},    {"ctrl", VK_CONTROL},
+      {"alt", VK_MENU},       {"capslock", VK_CAPITAL},
+      {"backspace", VK_BACK}, {"delete", VK_DELETE},
+      {"insert", VK_INSERT},  {"home", VK_HOME},
+      {"end", VK_END},        {"pageup", VK_PRIOR},
+      {"pagedown", VK_NEXT},
+
+      {"left", VK_LEFT},      {"right", VK_RIGHT},
+      {"up", VK_UP},          {"down", VK_DOWN},
+
+      {"f1", VK_F1},          {"f2", VK_F2},
+      {"f3", VK_F3},          {"f4", VK_F4},
+      {"f5", VK_F5},          {"f6", VK_F6},
+      {"f7", VK_F7},          {"f8", VK_F8},
+      {"f9", VK_F9},          {"f10", VK_F10},
+      {"f11", VK_F11},        {"f12", VK_F12},
+  };
+
+
+  auto it = keyMap.find(kn);
+  if (it != keyMap.end()) {
+    return it->second;
+  } else {
+    return 0; // 0 ±Ì æŒ¥’“µΩ
   }
 }
 

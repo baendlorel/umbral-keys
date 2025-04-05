@@ -1,7 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <iostream>
-#include <map>
+#include <unordered_map>
 
 using namespace std;
 
@@ -9,7 +9,7 @@ LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
 
 class UmbralKey {
 public:
-  static map<WORD, UmbralKey *> Instances;
+  static unordered_map<WORD, UmbralKey *> Instances;
   static HHOOK KeyboardHook;
   static void start();
   static UmbralKey *add(const char *name, WORD origin, WORD *umbras,
