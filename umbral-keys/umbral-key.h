@@ -30,7 +30,7 @@ private:
   string umbralMessage;
 
 private:
-  void init(string &name, WORD origin, WORD *umbras, int umbraSize);
+  void Initialize(string &name, WORD origin, WORD *umbras, int umbraSize);
 
 public:
   void umbral();

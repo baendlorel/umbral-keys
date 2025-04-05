@@ -158,3 +158,4 @@ NativeArray<string> split(const string &input, char delimiter = ',') {
   }
   return arr.toNativeArray();
 }
+

@@ -136,6 +136,7 @@
   <ItemGroup>
     <ClInclude Include="array.h" />
     <ClInclude Include="config-loader.h" />
+    <ClInclude Include="i18n.h" />
     <ClInclude Include="logger.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>

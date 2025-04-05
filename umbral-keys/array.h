@@ -13,14 +13,14 @@ private:
   size_t size;     // 当前大小
 
   // 扩展数组容量
-  void resize(size_t capacity) {
-    T *resized = new T[capacity];
+  void resize(size_t newCapacity) {
+    T *resized = new T[newCapacity];
     for (size_t i = 0; i < size; ++i) {
       resized[i] = data[i];
     }
     delete[] data;
     data = resized;
-    this->capacity = capacity;
+    capacity = newCapacity;
   }
 
 public:
@@ -42,7 +42,7 @@ public:
   // 删除指定下标的元素
   void remove(size_t index) {
     if (index >= size) {
-      throw std::out_of_range("[UmbralKeys Array::remove] Index out of range");
+      throw out_of_range("[UmbralKeys Array::remove] Index out of range");
     }
 
     for (size_t i = index; i < size - 1; ++i) {
@@ -73,14 +73,14 @@ public:
   // 获取指定索引的元素
   T &operator[](size_t index) {
     if (index >= size || index < 0) {
-      throw std::out_of_range("[UmbralKeys Array::operator[]] Index out of range");
+      throw out_of_range("[UmbralKeys Array::operator[]] Index out of range");
     }
     return data[index];
   }
 
   const T &operator[](size_t index) const {
     if (index >= size || index < 0) {
-      throw std::out_of_range("[UmbralKeys Array::operator[]] Index out of range");
+      throw out_of_range("[UmbralKeys Array::operator[]] Index out of range");
     }
     return data[index];
   }

@@ -1,13 +1,13 @@
 #pragma once
-#include "utils.h"
 #include "logger.h"
-#include <windows.h>
+#include "utils.h"
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <regex>
 #include <string>
 #include <unordered_map>
+#include <windows.h>
 
 using namespace std;
 
@@ -27,17 +27,17 @@ public:
       // 检查文件是否成功打开
       if (!newFile.is_open()) {
         Logger::Throw(L"Config::load",
-            L"Cannot create 'config.txt' (which must be in same folder)");
+                      L"Cannot create 'config.txt' (must be in same folder)");
       } else {
         newFile.close();
         cout << "[UmbralKeys Config::load] 'config.txt' created" << endl;
+        Logger::MsgBox(L"config.txt已经新建，请打开它进行配置吧！");
       }
     }
 
     ifstream file(configPath);
     if (!file.is_open()) {
-      throw runtime_error("[UmbralKeys Config::load] Cannot open "
-                          "'config.txt' (which must be in same folder)");
+      Logger::Throw(L"Config::load", L"Cannot open 'config.txt'");
     }
 
     string rawLine;
@@ -66,4 +66,3 @@ public:
     return umbralMap;
   }
 };
-

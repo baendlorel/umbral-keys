@@ -69,7 +69,7 @@ UmbralKey *UmbralKey::add(const char *name, const char *origin,
     _umbras[i] = getKeyCode(umbras[i]);
   }
 
-  u->init(_name, _origin, _umbras, umbraSize);
+  u->Initialize(_name, _origin, _umbras, umbraSize);
   Instances[_origin] = u; // 将实例添加到 map 中
   return u;
 }
@@ -87,7 +87,7 @@ void UmbralKey::umbral() {
   cout << "[" << name << "] " << count << "th: " << umbralMessage << endl;
 }
 
-void UmbralKey::init(string &name, WORD origin, WORD *umbras, int umbraSize) {
+void UmbralKey::Initialize(string &name, WORD origin, WORD *umbras, int umbraSize) {
   if (isInited) {
     cout << "UmbralKey [" << this->name << ": " << umbralMessage
          << "] is already initialized!" << endl;
