@@ -1,10 +1,14 @@
 #pragma once
+#include "array.h"
 #include <Windows.h>
-#include <unordered_map>
+#include <iostream>
+#include <sstream>
 #include <string>
+#include <unordered_map>
+
 using namespace std;
 
-inline string getKeyName(WORD keycode) {
+string getKeyName(WORD keycode) {
   switch (keycode) {
   case VK_BACK:
     return "Backspace";
@@ -90,21 +94,21 @@ inline string getKeyName(WORD keycode) {
   }
 }
 
-inline WORD getKeyCode(const char* keyname) {
-  std::string kn = keyname;
+WORD getKeyCode(const char *keyname) {
+  string kn = keyname;
   for (char &c : kn) {
-    c = std::tolower(c);
+    c = tolower(c);
   }
 
   if (kn.size() == 1) {
     char c = kn[0];
     if (c >= 'a' && c <= 'z')
-      return static_cast<WORD>(std::toupper(c));
+      return static_cast<WORD>(toupper(c));
     if (c >= '0' && c <= '9')
       return static_cast<WORD>(c);
   }
 
-  static const std::unordered_map<std::string, WORD> keyMap = {
+  static const unordered_map<string, WORD> keyMap = {
       {"enter", VK_RETURN},   {"esc", VK_ESCAPE},
       {"space", VK_SPACE},    {"tab", VK_TAB},
       {"shift", VK_SHIFT},    {"ctrl", VK_CONTROL},
@@ -125,7 +129,6 @@ inline WORD getKeyCode(const char* keyname) {
       {"f11", VK_F11},        {"f12", VK_F12},
   };
 
-
   auto it = keyMap.find(kn);
   if (it != keyMap.end()) {
     return it->second;
@@ -137,10 +140,21 @@ inline WORD getKeyCode(const char* keyname) {
 string join(string *arr, size_t length, string delimiter = ", ") {
   string result;
   for (size_t i = 0; i < length; i++) {
-    result += arr[i];
+    result.append(arr[i]);
     if (i < length - 1) {
-      result += delimiter; // 添加逗号和空格作为分隔符
+      result.append(delimiter); // 添加逗号和空格作为分隔符
     }
   }
   return result;
+}
+
+NativeArray<string> split(const string &input, char delimiter = ',') {
+  stringstream ss(input);
+  string item;
+  Array<string> arr;
+  while (getline(ss, item, delimiter)) {
+    string _item = item;
+    arr.push(_item);
+  }
+  return arr.toNativeArray();
 }

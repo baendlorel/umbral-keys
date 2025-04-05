@@ -1,6 +1,10 @@
 #pragma once
 #include <iostream>
-#include <stdexcept>
+
+template <typename T> struct NativeArray {
+  T *data; // 原生数组指针
+  size_t size; // 大小
+};
 
 template <typename T> class Array {
 private:
@@ -9,14 +13,14 @@ private:
   size_t size;     // 当前大小
 
   // 扩展数组容量
-  void resize(size_t new_capacity) {
-    T *new_data = new T[new_capacity];
+  void resize(size_t capacity) {
+    T *resized = new T[capacity];
     for (size_t i = 0; i < size; ++i) {
-      new_data[i] = data[i];
+      resized[i] = data[i];
     }
     delete[] data;
-    data = new_data;
-    capacity = new_capacity;
+    data = resized;
+    this->capacity = capacity;
   }
 
 public:
@@ -38,7 +42,7 @@ public:
   // 删除指定下标的元素
   void remove(size_t index) {
     if (index >= size) {
-      throw std::out_of_range("Index out of range");
+      throw std::out_of_range("[UmbralKeys Array::remove] Index out of range");
     }
 
     for (size_t i = index; i < size - 1; ++i) {
@@ -53,26 +57,30 @@ public:
   // 获取当前数组的长度
   size_t getSize() const { return size; }
 
-  T *to_array() const {
+  NativeArray<T> toNativeArray() const {
     // 返回一个新的数组，包含当前的元素
-    T *new_array = new T[size];
+    T *arr = new T[size];
     for (size_t i = 0; i < size; ++i) {
-      new_array[i] = data[i];
+      arr[i] = data[i];
     }
-    return new_array;
+
+    NativeArray<T> nativeArray;
+    nativeArray.data = arr;
+    nativeArray.size = size;
+    return nativeArray;
   }
 
   // 获取指定索引的元素
   T &operator[](size_t index) {
-    if (index >= size) {
-      throw std::out_of_range("Index out of range");
+    if (index >= size || index < 0) {
+      throw std::out_of_range("[UmbralKeys Array::operator[]] Index out of range");
     }
     return data[index];
   }
 
   const T &operator[](size_t index) const {
-    if (index >= size) {
-      throw std::out_of_range("Index out of range");
+    if (index >= size || index < 0) {
+      throw std::out_of_range("[UmbralKeys Array::operator[]] Index out of range");
     }
     return data[index];
   }

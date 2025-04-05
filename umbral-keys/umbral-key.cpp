@@ -47,8 +47,7 @@ HHOOK UmbralKey::KeyboardHook;
 void UmbralKey::start() {
   KeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, NULL, 0);
   if (KeyboardHook == NULL) {
-    cerr << "Failed to install keyboard hook!" << endl;
-    exit(1);
+    throw runtime_error("[UmbralKeys UmbralKey::start] Failed to install keyboard hook!");
   }
 
   MSG msg;

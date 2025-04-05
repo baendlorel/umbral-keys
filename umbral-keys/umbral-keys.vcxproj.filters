@@ -32,6 +32,12 @@
     <ClInclude Include="array.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="config-loader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="logger.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md">
