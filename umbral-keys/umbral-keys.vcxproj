@@ -128,7 +128,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="backup.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="umbral-key.h" />
     <ClCompile Include="umbral-key.cpp" />
