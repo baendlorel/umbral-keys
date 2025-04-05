@@ -58,12 +58,20 @@ void UmbralKey::start() {
   }
 }
 
-UmbralKey *UmbralKey::add(const char *name, WORD origin, WORD *umbras,
+UmbralKey *UmbralKey::add(const char *name, const char *origin,
+                          const char *umbras[],
                           int umbraSize) {
   UmbralKey *u = new UmbralKey();
   string _name(name);
-  u->init(_name, origin, umbras, umbraSize);
-  Instances[origin] = u; // 将实例添加到 map 中
+  
+  WORD _origin = getKeyCode(origin);
+  WORD *_umbras = new WORD[umbraSize];
+  for (size_t i = 0; i < umbraSize; i++) {
+    _umbras[i] = getKeyCode(umbras[i]);
+  }
+
+  u->init(_name, _origin, _umbras, umbraSize);
+  Instances[_origin] = u; // 将实例添加到 map 中
   return u;
 }
 

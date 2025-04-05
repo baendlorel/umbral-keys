@@ -12,7 +12,8 @@ public:
   static unordered_map<WORD, UmbralKey *> Instances;
   static HHOOK KeyboardHook;
   static void start();
-  static UmbralKey *add(const char *name, WORD origin, WORD *umbras,
+  static UmbralKey *add(const char *name, const char *origin,
+                        const char *umbras[],
                         int umbraSize);
 
 private:
