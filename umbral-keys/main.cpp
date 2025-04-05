@@ -15,9 +15,5 @@ int main() {
     cout << "[" << umbras.data[i] << "]" << endl;
   }
 
-  Logger::MsgBox(I18N(L"from来源", L"from source"),
-                 I18N(L"测试内容", L"test content"));
-  Logger::Throw(I18N(L"trhwoer", L"中文"),
-                 I18N(L"trhwoer content", L"中文 content"));
   return 0;
 }

@@ -1,8 +1,8 @@
 #pragma once
 #include "i18n.h"
+#include <chrono> // 用于获取时间
 #include <iostream>
 #include <string>
-#include <chrono>   // 用于获取时间
 #include <windows.h>
 
 using namespace std;
@@ -46,12 +46,25 @@ private:
     string head = getCurrentTimestamp();
     return head.append(" ").append(result);
   }
+  static string ToConsole(const char *from, const char *message) {
+    string m = getCurrentTimestamp();
+    m.append(" ");
+    if (string(from).empty()) {
+      m.append("[UmbralKeys] ");
+    } else {
+      m.append("[UmbralKeys ");
+      m.append(from);
+      m.append("] ");
+    }
+    m.append(message);
+    return m;
+  }
 
   static string getCurrentTimestamp() {
     auto now = chrono::system_clock::now();
-    auto ms = chrono::duration_cast<chrono::milliseconds>(
-                  now.time_since_epoch()) %
-              1000;
+    auto ms =
+        chrono::duration_cast<chrono::milliseconds>(now.time_since_epoch()) %
+        1000;
     auto timer = chrono::system_clock::to_time_t(now);
 
     tm bt;
@@ -75,7 +88,7 @@ public:
     cout << ToConsole(from, message) << endl;
   }
 
-  static void Log(const WCHAR *message, const WCHAR *from) {
+  static void Log(const char *message, const char *from = "") {
     cout << ToConsole(from, message) << endl;
   }
 
@@ -87,7 +100,8 @@ public:
   // 多国语言版
 
   static void MsgBox(const I18N &message) {
-    MessageBox(NULL, ToDisplay(L"", message.wstr()).c_str(), title, MB_OK | MB_TOPMOST);
+    MessageBox(NULL, ToDisplay(L"", message.wstr()).c_str(), title,
+               MB_OK | MB_TOPMOST);
     cout << ToConsole(L"", message.wstr()) << endl;
   }
 
@@ -97,13 +111,9 @@ public:
     cout << ToConsole(from.wstr(), message.wstr()) << endl;
   }
 
-  static void Log(const I18N &&message, const I18N &&from) {
-    cout << ToConsole(from.wstr(), message.wstr()) << endl;
-  }
-
-  static void Throw(const I18N &&message, const I18N &&from) {
-    MsgBox(from, message);
-    throw runtime_error(ToConsole(from.wstr(), message.wstr()));
+  static void Throw(const I18N &&message, const WCHAR *from) {
+    MsgBox(message.wstr(), from);
+    throw runtime_error(ToConsole(from, message.wstr()));
   }
 };
 
