@@ -62,43 +62,45 @@ void UmbralKey::start() {
   }
 }
 
-UmbralKey *UmbralKey::add(chars origin, chars umbras[], int size) {
+UmbralKey *UmbralKey::add(chars origin, const Array<chars> &umbras) {
   UmbralKey *u = new UmbralKey();
 
+  size_t size = umbras.getSize();
   WORD _origin = getKeyCode(origin);
-  WORD *_umbras = new WORD[size];
+  Array<WORD> _umbras;
   for (size_t i = 0; i < size; i++) {
-    _umbras[i] = getKeyCode(umbras[i]);
+    _umbras.push(getKeyCode(umbras[i]));
   }
 
-  u->Initialize(_origin, _umbras, size);
+  u->Initialize(_origin, _umbras);
   Instances[_origin] = u;  // 将实例添加到 map 中
   return u;
 }
 
 // 成员
 void UmbralKey::umbral() {
+  static int _inputSize = sizeof(INPUT);
+
+  UINT _size = static_cast<UINT>(size);
+
   // 发送按键输入
-  SendInput(size, press, sizeof(INPUT));
+  SendInput(_size, press, _inputSize);
 
   // 发送释放的按键
-  SendInput(size, release, sizeof(INPUT));
+  SendInput(_size, release, _inputSize);
 
   Logger::Log(format("{} {}", message, ++count));
 }
 
-void UmbralKey::Initialize(WORD origin, WORD *umbras, int size) {
+void UmbralKey::Initialize(WORD origin, const Array<WORD> &umbras) {
   if (isInited) {
-    Logger::Log(message + " is already initialized!",
-                "UmbralKey::Initialize");
+    Logger::Log(message + " is already initialized!", "UmbralKey::Initialize");
     return;
   }
 
   isInited = true;
   count = 0;
-
-  // 设置原始按键
-  this->size = size;
+  size = umbras.getSize();
 
   // 必须全部好好地初始化，否则SendInput将不会工作，但也不报错，就是无效
   press = createInputArray(size);

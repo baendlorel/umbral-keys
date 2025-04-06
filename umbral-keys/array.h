@@ -23,7 +23,10 @@ class Array {
   // 构造函数
   Array();
 
+  Array(size_t size);
+
   Array(initializer_list<T> list);
+  ;
 
   // 析构函数
   ~Array();
@@ -78,6 +81,15 @@ Array<T>::Array() {
   size = 0;
 }
 
+template <typename T>
+Array<T>::Array(size_t size) {
+  if (size <= 0) {
+    throw invalid_argument("[UmbralKeys Array] size must be greater than 0");
+  }
+  data = new T[size];
+  capacity = size;
+  this->size = size;
+}
 
 template <typename T>
 Array<T>::Array(std::initializer_list<T> list)
@@ -154,4 +166,3 @@ const T &Array<T>::operator[](size_t index) const {
   }
   return data[index];
 }
-

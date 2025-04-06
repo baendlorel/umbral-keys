@@ -6,7 +6,7 @@
 
 void initialize() {
   I18N::Initialize();
-  UmbralKey::add("capslock", new const char*[2]{"ctrl", "space"}, 2);
+  UmbralKey::add("capslock", Array<chars>{"ctrl", "space"});
   UmbralKey::start();
 }
 

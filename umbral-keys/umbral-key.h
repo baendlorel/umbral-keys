@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <unordered_map>
+#include "array.h"
 
 typedef const char *chars;
 #define CHARS new const char*
@@ -16,18 +17,18 @@ class UmbralKey {
   static unordered_map<WORD, UmbralKey *> Instances;
   static HHOOK KeyboardHook;
   static void start();
-  static UmbralKey *add(chars origin, chars umbras[], int size);
+  static UmbralKey *add(chars origin, const Array<chars>& umbras);
 
  private:
   bool isInited;
-  int count;
-  int size;
+  size_t count;
+  size_t size;
   INPUT *press;
   INPUT *release;
   string message;
 
  private:
-  void Initialize(WORD origin, WORD *umbras, int size);
+  void Initialize(WORD origin, const Array<WORD> &umbras);
 
  public:
   void umbral();
