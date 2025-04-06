@@ -6,6 +6,7 @@
 
 void initialize() {
   I18N::Initialize();
+  unordered_map<string, Array<string>> umbralConfig = LoadConfig();
   UmbralKey::add("capslock", Array<chars>{"ctrl", "space"});
   UmbralKey::start();
 }
@@ -13,11 +14,11 @@ void initialize() {
 int main() {
   initialize();
 
-  NativeArray<string> umbras = split("ctrl++space+", '+');
-  cout << "size: " << umbras.size << endl;
-  for (size_t i = 0; i < umbras.size; i++) {
-    cout << i << " -> " << umbras.size << endl;
-    cout << "[" << umbras.data[i] << "]" << endl;
+  Array<string> umbras = split("ctrl++space+", '+');
+  cout << "size: " << umbras.getSize() << endl;
+  for (size_t i = 0; i < umbras.getSize(); i++) {
+    cout << i << " -> " << umbras.getSize() << endl;
+    cout << "[" << umbras[i] << "]" << endl;
   }
 
   return 0;

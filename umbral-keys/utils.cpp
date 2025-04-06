@@ -143,7 +143,7 @@ string join(string *arr, size_t length, string delimiter) {
   return result;
 }
 
-NativeArray<string> split(const string &input, char delimiter) {
+Array<string> split(const string &input, char delimiter) {
   stringstream ss(input);
   string item;
   Array<string> arr;
@@ -151,5 +151,5 @@ NativeArray<string> split(const string &input, char delimiter) {
     string _item = item;
     arr.push(_item);
   }
-  return arr.toNativeArray();
+  return arr;
 }

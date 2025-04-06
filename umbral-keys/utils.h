@@ -16,4 +16,4 @@ WORD getKeyCode(const char *keyname);
 
 string join(string *arr, size_t length, string delimiter = ", ");
 
-NativeArray<string> split(const string &input, char delimiter = ',');
+Array<string> split(const string &input, char delimiter = ',');

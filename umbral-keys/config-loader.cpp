@@ -1,15 +1,21 @@
 #pragma once
 #include "config-loader.h"
 
-unordered_map<string, NativeArray<string>> Config::Load() {
-  static const WCHAR *h = L"Config::load";
+void openNotepad(const path& filePath) {
+  string command = "notepad.exe " + filePath.string();
+  system(command.c_str());
+}
 
-  filesystem::path cwd = filesystem::current_path();  // 获取当前工作目录
-  filesystem::path configPath = cwd / "config.txt";   // 拼接文件名
+unordered_map<string, Array<string>> LoadConfig() {
+
+  static const WCHAR* h = L"Config::load";
+
+  path cwd = current_path();  // 获取当前工作目录
+  path configPath = cwd / "config.txt";   // 拼接文件名
 
   Logger::Log(format("configPath: {}", configPath.string()), "Config::load");
 
-  if (!filesystem::exists(configPath)) {
+  if (!exists(configPath)) {
     // 创建并打开文件
     ofstream newFile(configPath);
 
@@ -20,6 +26,23 @@ unordered_map<string, NativeArray<string>> Config::Load() {
                L"Cannot create 'config.txt' (must be in same folder)"},
           h);
     } else {
+      newFile << "# UmbralKeys 配置（'#'开头表示注释）\n";
+      newFile << "# UmbralKeys key mapping configuration \n";
+      newFile << "# \n";
+      newFile << "# 格式：origin=umbral1+umbral2+...\n";
+      newFile << "# Format：origin=umbral1+umbral2+...\n";
+      newFile << "# \n";
+      newFile << "# 大小写都是可以的\n";
+      newFile << "# Upper case or lower case matters not \n";
+      newFile << "# \n";
+      newFile << "# 不同按键和加号之间带有空格也是可以的\n";
+      newFile << "# Spaces between key names and plus signs are allowed \n";
+      newFile << "# \n";
+      newFile << "# 下方的两个配置案例等价\n";
+      newFile << "# Two configurations bellow are equivalent\n";
+      newFile << "# \n";
+      newFile << "# capslock=ctrl+space\n";
+      newFile << "# CapsLock = Ctrl + Space\n";
       newFile.close();
       Logger::MsgBox(
           I18N{L"config."
@@ -27,6 +50,9 @@ unordered_map<string, NativeArray<string>> Config::Load() {
                L"新打开影键",
                L"config.txt is created. Please open it and write key maps. "
                L"After saving it, run UmbralKeys again."});
+      // 打开记事本，但这个是子进程，编辑完成后还要重新LoadConfig
+      openNotepad(configPath);
+      return LoadConfig();
     }
   }
 
@@ -36,25 +62,39 @@ unordered_map<string, NativeArray<string>> Config::Load() {
   }
 
   string line;
-  unordered_map<string, NativeArray<string>> umbralMap;
+  unordered_map<string, Array<string>> umbralMap;
   while (getline(file, line)) {
     erase_if(line, ::isspace);
+
+    // 跳过空行和注释行
+    if (line.at(0) == '#' || line.length() == 0) {
+      continue;
+    }
+
     size_t pos = line.find('=');
     if (pos == string::npos) {
       continue;
     }
 
     string origin = line.substr(0, pos);
-    NativeArray<string> umbras = split(line.substr(pos + 1), '+');
-
-    if (!origin.empty() && umbras.size > 0) {
+    Array<string> umbras = split(line.substr(pos + 1), '+');
+    
+    if (!origin.empty() && umbras.getSize() > 0) {
       umbralMap[origin] = umbras;
     }
   }
 
   if (umbralMap.size() == 0) {
-    Logger::Abort(I18N{L"未加载到可用的键盘映射配置", L"No valid config found"},
-                  h);
+    Logger::MsgBox(I18N{
+        L"未加载到可用的键盘映射配置，现将开启config."
+        L"txt文件，请编辑后保存退出，影键会自动重试加载它",
+        L"No valid config found. Now opening config.txt. Please edit it, save "
+        L"it then quit Notepad. UmbralKeys will try to load it again."});
+    // 打开记事本，但这个是子进程，编辑完成后还要重新LoadConfig
+    openNotepad(configPath);
+    // 先关了再重新加载
+    file.close();
+    return LoadConfig();
   }
 
   file.close();

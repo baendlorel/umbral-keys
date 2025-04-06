@@ -3,15 +3,10 @@
 #include "utils.h"
 #include <filesystem>
 #include <fstream>
-#include <iostream>
-#include <string>
-#include <format>
 #include <unordered_map>
-#include <windows.h>
+#include <cstdlib>
 
 using namespace std;
+using namespace std::filesystem;
 
-class Config {
-public:
-  static unordered_map<string, NativeArray<string>> Load();
-};
+unordered_map<string, Array<string>> LoadConfig();
