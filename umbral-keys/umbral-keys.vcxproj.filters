@@ -24,6 +24,15 @@
     <ClCompile Include="umbral-key.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="array.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="i18n.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="logger.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils.h">

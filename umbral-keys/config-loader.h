@@ -4,8 +4,8 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <regex>
 #include <string>
+#include <format>
 #include <unordered_map>
 #include <windows.h>
 
@@ -20,7 +20,7 @@ public:
         filesystem::current_path(); // 获取当前工作目录
     filesystem::path configPath = currentPath / "config.txt"; // 拼接文件名
 
-    cout << "configPath: " << configPath << endl;
+    Logger::Log(format("configPath: {}", configPath.string()), "Config::load");
 
     if (!filesystem::exists(configPath)) {
       // 创建并打开文件
@@ -28,7 +28,7 @@ public:
 
       // 检查文件是否成功打开
       if (!newFile.is_open()) {
-        Logger::Throw(
+        Logger::Abort(
             I18N{L"在程序文件夹内新建config.txt失败",
                  L"Cannot create 'config.txt' (must be in same folder)"},
             h);
@@ -45,14 +45,14 @@ public:
 
     ifstream file(configPath);
     if (!file.is_open()) {
-      Logger::Throw(I18N{L"无法打开config.txt", L"Cannot open 'config.txt'"},
+      Logger::Abort(I18N{L"无法打开config.txt", L"Cannot open 'config.txt'"},
                     h);
     }
 
-    string rawLine;
+    string line;
     unordered_map<string, NativeArray<string>> umbralMap;
-    while (getline(file, rawLine)) {
-      string line = regex_replace(rawLine, regex("\\s+"), ""); // 去除注释
+    while (getline(file, line)) {
+      erase_if(line, ::isspace);
       size_t pos = line.find('=');
       if (pos == string::npos) {
         continue;
@@ -67,7 +67,7 @@ public:
     }
 
     if (umbralMap.size() == 0) {
-      Logger::Throw(
+      Logger::Abort(
           I18N{L"未加载到可用的键盘映射配置", L"No valid config found"}, h);
     }
 

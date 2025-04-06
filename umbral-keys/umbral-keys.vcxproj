@@ -105,7 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,6 +129,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="array.cpp" />
+    <ClCompile Include="i18n.cpp" />
+    <ClCompile Include="logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="umbral-key.h" />
     <ClCompile Include="umbral-key.cpp" />

@@ -1,5 +1,7 @@
 #include "umbral-key.h"
+#include "logger.h"
 #include "utils.h"
+#include <format>
 
 INPUT *createInputArray(size_t size) {
   INPUT *arr = new INPUT[size];
@@ -47,7 +49,8 @@ HHOOK UmbralKey::KeyboardHook;
 void UmbralKey::start() {
   KeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, NULL, 0);
   if (KeyboardHook == NULL) {
-    throw runtime_error("[UmbralKeys UmbralKey::start] Failed to install keyboard hook!");
+    Logger::Abort(I18N{L"设定键盘钩子失败", L"Failed to install keyboard hook"},
+                  L"UmbralKey::start");
   }
 
   MSG msg;
@@ -58,11 +61,10 @@ void UmbralKey::start() {
 }
 
 UmbralKey *UmbralKey::add(const char *name, const char *origin,
-                          const char *umbras[],
-                          int umbraSize) {
+                          const char *umbras[], int umbraSize) {
   UmbralKey *u = new UmbralKey();
   string _name(name);
-  
+
   WORD _origin = getKeyCode(origin);
   WORD *_umbras = new WORD[umbraSize];
   for (size_t i = 0; i < umbraSize; i++) {
@@ -76,21 +78,21 @@ UmbralKey *UmbralKey::add(const char *name, const char *origin,
 
 // 成员
 void UmbralKey::umbral() {
-  count++;
-
   // 发送按键输入
   SendInput(umbraSize, umbralInput, sizeof(INPUT));
 
   // 发送释放的按键
   SendInput(umbraSize, umbralRelease, sizeof(INPUT));
 
-  cout << "[" << name << "] " << count << "th: " << umbralMessage << endl;
+  Logger::Log(format("{} {}th time", umbralMessage, ++count),
+              "UmbralKey::umbral");
 }
 
-void UmbralKey::Initialize(string &name, WORD origin, WORD *umbras, int umbraSize) {
+void UmbralKey::Initialize(string &name, WORD origin, WORD *umbras,
+                           int umbraSize) {
   if (isInited) {
-    cout << "UmbralKey [" << this->name << ": " << umbralMessage
-         << "] is already initialized!" << endl;
+    Logger::Log(umbralMessage + " is already initialized!",
+                "UmbralKey::Initialize");
     return;
   }
   isInited = true;
@@ -118,11 +120,11 @@ void UmbralKey::Initialize(string &name, WORD origin, WORD *umbras, int umbraSiz
     names[i] = getKeyName(umbras[i]); // 获取按键名称
   }
 
-  umbralMessage = "'" + getKeyName(origin) + "' -> '" +
-                  join(names, umbraSize, " + ") + "'";
+  umbralMessage = "{ " + this->name + ": '" + getKeyName(origin) + "' -> '" +
+                  join(names, umbraSize, " + ") + "' }";
 
-  cout << "UmbralKey [" << this->name << ": " << umbralMessage
-       << "] is initialized successfully" << endl;
+  Logger::Log(umbralMessage + " is initialized successfully",
+              "UmbralKey::Initialize");
 }
 
 UmbralKey::UmbralKey() {
