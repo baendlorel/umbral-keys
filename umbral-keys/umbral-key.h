@@ -16,23 +16,18 @@ class UmbralKey {
   static unordered_map<WORD, UmbralKey *> Instances;
   static HHOOK KeyboardHook;
   static void start();
-  static UmbralKey *add(chars origin, chars umbras[], int umbraSize);
+  static UmbralKey *add(chars origin, chars umbras[], int size);
 
  private:
   bool isInited;
-  bool isActive;
-  string name;
   int count;
+  int size;
+  INPUT *press;
+  INPUT *release;
+  string message;
 
  private:
-  WORD origin;
-  int umbraSize;
-  INPUT *umbralInput;
-  INPUT *umbralRelease;
-  string umbralMessage;
-
- private:
-  void Initialize(WORD origin, WORD *umbras, int umbraSize);
+  void Initialize(WORD origin, WORD *umbras, int size);
 
  public:
   void umbral();

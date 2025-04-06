@@ -62,16 +62,16 @@ void UmbralKey::start() {
   }
 }
 
-UmbralKey *UmbralKey::add(chars origin, chars umbras[], int umbraSize) {
+UmbralKey *UmbralKey::add(chars origin, chars umbras[], int size) {
   UmbralKey *u = new UmbralKey();
 
   WORD _origin = getKeyCode(origin);
-  WORD *_umbras = new WORD[umbraSize];
-  for (size_t i = 0; i < umbraSize; i++) {
+  WORD *_umbras = new WORD[size];
+  for (size_t i = 0; i < size; i++) {
     _umbras[i] = getKeyCode(umbras[i]);
   }
 
-  u->Initialize(_origin, _umbras, umbraSize);
+  u->Initialize(_origin, _umbras, size);
   Instances[_origin] = u;  // 将实例添加到 map 中
   return u;
 }
@@ -79,69 +79,64 @@ UmbralKey *UmbralKey::add(chars origin, chars umbras[], int umbraSize) {
 // 成员
 void UmbralKey::umbral() {
   // 发送按键输入
-  SendInput(umbraSize, umbralInput, sizeof(INPUT));
+  SendInput(size, press, sizeof(INPUT));
 
   // 发送释放的按键
-  SendInput(umbraSize, umbralRelease, sizeof(INPUT));
+  SendInput(size, release, sizeof(INPUT));
 
-  Logger::Log(format("{} {}", umbralMessage, ++count));
+  Logger::Log(format("{} {}", message, ++count));
 }
 
-void UmbralKey::Initialize(WORD origin, WORD *umbras, int umbraSize) {
+void UmbralKey::Initialize(WORD origin, WORD *umbras, int size) {
   if (isInited) {
-    Logger::Log(umbralMessage + " is already initialized!",
+    Logger::Log(message + " is already initialized!",
                 "UmbralKey::Initialize");
     return;
   }
 
   isInited = true;
-  isActive = true;
   count = 0;
 
   // 设置原始按键
-  this->origin = origin;
-  this->umbraSize = umbraSize;
+  this->size = size;
 
   // 必须全部好好地初始化，否则SendInput将不会工作，但也不报错，就是无效
-  umbralInput = createInputArray(umbraSize);
-  umbralRelease = createInputArray(umbraSize);
+  press = createInputArray(size);
+  release = createInputArray(size);
 
-  string *names = new string[umbraSize];
+  string *names = new string[size];
 
-  for (size_t i = 0; i < umbraSize; i++) {
+  for (size_t i = 0; i < size; i++) {
     // 按下
-    umbralInput[i].ki.wVk = umbras[i];
+    press[i].ki.wVk = umbras[i];
 
     // 释放
-    umbralRelease[i].ki.wVk = umbras[i];
-    umbralRelease[i].ki.dwFlags = KEYEVENTF_KEYUP;
+    release[i].ki.wVk = umbras[i];
+    release[i].ki.dwFlags = KEYEVENTF_KEYUP;
 
     // 键名
     names[i] = getKeyName(umbras[i]);  // 获取按键名称
   }
 
-  umbralMessage = getKeyName(origin) + " -> " + join(names, umbraSize, " + ");
+  message = getKeyName(origin) + " -> " + join(names, size, " + ");
 
-  Logger::Log(umbralMessage + " is initialized", "UmbralKey::Initialize");
+  Logger::Log(message + " is initialized", "UmbralKey::Initialize");
 }
 
 UmbralKey::UmbralKey() {
-  isActive = false;
   isInited = false;
-  name = "";
   count = 0;
 
-  origin = 0;
-  umbraSize = 0;
-  umbralInput = nullptr;
-  umbralRelease = nullptr;
+  size = 0;
+  press = nullptr;
+  release = nullptr;
 }
 
 UmbralKey::~UmbralKey() {
-  if (umbralInput != nullptr) {
-    delete[] umbralInput;
+  if (press != nullptr) {
+    delete[] press;
   }
-  if (umbralRelease != nullptr) {
-    delete[] umbralRelease;
+  if (release != nullptr) {
+    delete[] release;
   }
 }
