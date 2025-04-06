@@ -117,10 +117,11 @@ void UmbralKey::Initialize(string &name, WORD origin, WORD *umbras,
     umbralRelease[i].ki.dwFlags = KEYEVENTF_KEYUP;
 
     // 键名
-    names[i] = getKeyName(umbras[i]); // 获取按键名称
+    names[i] = getKeyName(umbras[i]);  // 获取按键名称
   }
 
-  umbralMessage = "{ " + this->name + ": '" + getKeyName(origin) + "' -> '" +
+  umbralMessage = "{ " + this->name + ": '" + getKeyName(origin) +
+                  "' -> '" +
                   join(names, umbraSize, " + ") + "' }";
 
   Logger::Log(umbralMessage + " is initialized successfully",

@@ -78,15 +78,15 @@ void Logger::MsgBox(const WCHAR *message, const WCHAR *from) {
   cout << ToConsole(from, message) << endl;
 }
 
-void Logger::Log(const char *message, const char *from = "") {
+void Logger::Log(const char *message, const char *from) {
   cout << ToConsole(from, message) << endl;
 }
 
-void Logger::Log(const string &message, const char *from = "") {
+void Logger::Log(const string &message, const char *from) {
   cout << ToConsole(from, message.c_str()) << endl;
 }
 
-void Logger::Log(const ostringstream &message, const char *from = "") {
+void Logger::Log(const ostringstream &message, const char *from) {
   cout << ToConsole(from, message.str().c_str()) << endl;
 }
 

@@ -12,7 +12,7 @@ void initialize() {
 }
 
 int main() {
-  NativeArray<string> umbras = split("ctrl++space+", '+');
+  NativeArray<string> umbras = Util::Split("ctrl++space+", '+');
   cout << "size: " << umbras.size << endl;
   for (size_t i = 0; i < umbras.size; i++) {
     cout << i << " -> " << umbras.size << endl;

@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="源文件\misc">
+      <UniqueIdentifier>{82395401-db5d-440d-871f-c557aaa78f66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\misc">
+      <UniqueIdentifier>{9f9da42d-00f2-4b5b-8fb3-2d8ec4dfbe50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,31 +30,34 @@
     <ClCompile Include="umbral-key.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="array.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="i18n.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\misc</Filter>
     </ClCompile>
     <ClCompile Include="logger.cpp">
+      <Filter>源文件\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>源文件\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="config-loader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="utils.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="array.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="config-loader.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="logger.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="array.h">
+      <Filter>头文件\misc</Filter>
     </ClInclude>
     <ClInclude Include="i18n.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="logger.h">
+      <Filter>头文件\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>头文件\misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

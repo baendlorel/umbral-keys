@@ -37,4 +37,3 @@ public:
   static void Abort(const I18N &&message, const WCHAR *from);
 };
 
-const WCHAR *Logger::title = L"Ó°¼ü / UmbralKeys";
