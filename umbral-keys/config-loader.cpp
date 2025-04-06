@@ -45,7 +45,7 @@ unordered_map<string, NativeArray<string>> Config::Load() {
     }
 
     string origin = line.substr(0, pos);
-    NativeArray<string> umbras = Util::Split(line.substr(pos + 1), '+');
+    NativeArray<string> umbras = split(line.substr(pos + 1), '+');
 
     if (!origin.empty() && umbras.size > 0) {
       umbralMap[origin] = umbras;

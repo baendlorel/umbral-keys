@@ -1,43 +1,45 @@
 #pragma once
 #include <Windows.h>
+
 #include <iostream>
 #include <unordered_map>
+
+typedef const char *chars;
+#define CHARS new const char*
 
 using namespace std;
 
 LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
 
 class UmbralKey {
-public:
+ public:
   static unordered_map<WORD, UmbralKey *> Instances;
   static HHOOK KeyboardHook;
   static void start();
-  static UmbralKey *add(const char *name, const char *origin,
-                        const char *umbras[],
-                        int umbraSize);
+  static UmbralKey *add(chars origin, chars umbras[], int umbraSize);
 
-private:
+ private:
   bool isInited;
   bool isActive;
   string name;
   int count;
 
-private:
+ private:
   WORD origin;
   int umbraSize;
   INPUT *umbralInput;
   INPUT *umbralRelease;
   string umbralMessage;
 
-private:
-  void Initialize(string &name, WORD origin, WORD *umbras, int umbraSize);
+ private:
+  void Initialize(WORD origin, WORD *umbras, int umbraSize);
 
-public:
+ public:
   void umbral();
 
-private:
+ private:
   UmbralKey();
 
-public:
+ public:
   ~UmbralKey();
 };

@@ -23,6 +23,8 @@ class Array {
   // 构造函数
   Array();
 
+  Array(initializer_list<T> list);
+
   // 析构函数
   ~Array();
 
@@ -50,22 +52,22 @@ class Array {
 template <typename T>
 void Array<T>::expand() {
   if (size < capacity) {
-    return;
+    return;  // 无需扩容
   }
 
-  capacity = capacity * 2;
-  if (capacity == 0) {
-    capacity = 3;
-    data = new T[capacity];
-    return;
+  size_t newCapacity = (capacity == 0) ? 3 : capacity * 2;
+  T *resized = new T[newCapacity];  // 可能抛出 std::bad_alloc
+
+  // 仅当原 data 有效时才拷贝数据
+  if (data != nullptr) {
+    for (size_t i = 0; i < size; ++i) {
+      resized[i] = data[i];  // 确保 size <= capacity
+    }
+    delete[] data;
   }
 
-  T *resized = new T[capacity];
-  for (size_t i = 0; i < size; ++i) {
-    resized[i] = data[i];
-  }
-  delete[] data;
   data = resized;
+  capacity = newCapacity;
 }
 
 // 构造函数
@@ -76,7 +78,14 @@ Array<T>::Array() {
   size = 0;
 }
 
-// 构造函数
+
+template <typename T>
+Array<T>::Array(std::initializer_list<T> list)
+    : size(list.size()), capacity(list.size()) {
+  data = new T[capacity];
+  std::copy(list.begin(), list.end(), data);
+}
+
 template <typename T>
 Array<T>::~Array() {
   delete[] data;
@@ -145,3 +154,4 @@ const T &Array<T>::operator[](size_t index) const {
   }
   return data[index];
 }
+
