@@ -2,23 +2,26 @@
 #include "config.h"
 #define U8(x) reinterpret_cast<const char*>(u8##x)
 
-void openNotepad(const path& filePath) {
-  string command = "notepad.exe " + filePath.string();
-  system(command.c_str());
+void Config::OpenConfigFile() {
+  path cwd = current_path();             // 获取当前工作目录
+  path configPath = cwd / "config.txt";  // 拼接文件名
+  string command = "notepad.exe " + configPath.string();
+  //system(command.c_str());
+  ShellExecute(NULL, L"open", configPath.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 
-unordered_map<WORD, Array<WORD>> LoadConfig() {
+unordered_map<WORD, Array<WORD>> Config::Load() {
   static const WCHAR* wh = L"Config::load";
   static const char* h = "Config::load";
   static auto oeditAndReload = [](ofstream& file, const path& filePath) {
     file.close();
-    openNotepad(filePath);
-    return LoadConfig();
+    OpenConfigFile();
+    return Load();
   };
   static auto ieditAndReload = [](ifstream& file, const path& filePath) {
     file.close();
-    openNotepad(filePath);
-    return LoadConfig();
+    OpenConfigFile();
+    return Load();
   };
 
   path cwd = current_path();             // 获取当前工作目录

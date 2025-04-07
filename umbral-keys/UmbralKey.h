@@ -3,10 +3,11 @@
 
 #include <iostream>
 #include <unordered_map>
+
 #include "Array.h"
 
 typedef const char *chars;
-#define CHARS new const char*
+#define CHARS new const char *
 
 using namespace std;
 
@@ -16,12 +17,18 @@ class UmbralKey {
  public:
   static unordered_map<WORD, UmbralKey *> Instances;
   static HHOOK KeyboardHook;
-  static void start();
+  static void InitializeKeyboardHook();
   static UmbralKey *Add(chars origin, const Array<chars> &umbras);
-  static void ApplyConfig(const unordered_map<WORD, Array<WORD>>& config);
+  static void ApplyConfig(const unordered_map<WORD, Array<WORD>> &config);
+
+  // È«¾Ö½ûÓÃ
+  static bool disabledAll;
+  static inline void ToggleAll() { disabledAll = !disabledAll; };
+  static inline bool GetDisabledAll() { return disabledAll; };
 
  private:
   bool isInitialized;
+  bool disabled;
   size_t count;
   size_t size;
   INPUT *press;
@@ -33,6 +40,8 @@ class UmbralKey {
 
  public:
   void umbral();
+  inline void toggle() { disabled = !disabled; };
+  inline bool getDisabled() const { return disabled; }
 
  private:
   UmbralKey();

@@ -108,7 +108,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -133,6 +133,7 @@
     <ClCompile Include="I18N.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TrayManager.cpp" />
     <ClCompile Include="UmbralKey.h" />
     <ClCompile Include="UmbralKey.cpp" />
     <ClCompile Include="utils.cpp" />
@@ -141,7 +142,9 @@
     <ClInclude Include="Array.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="I18N.h" />
+    <ClInclude Include="info.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="TrayManager.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>

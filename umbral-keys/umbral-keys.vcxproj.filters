@@ -42,6 +42,9 @@
     <ClCompile Include="config.cpp">
       <Filter>源文件\misc</Filter>
     </ClCompile>
+    <ClCompile Include="TrayManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Array.h">
@@ -58,6 +61,12 @@
     </ClInclude>
     <ClInclude Include="config.h">
       <Filter>头文件\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="TrayManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="info.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

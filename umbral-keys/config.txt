@@ -15,4 +15,4 @@
 # 
 # capslock=ctrl+space
 # CapsLock = Ctrl + Space
-capslock=ctrl+space
+CapsLock = Ctrl + Space

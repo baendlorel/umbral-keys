@@ -48,17 +48,11 @@ LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
 unordered_map<WORD, UmbralKey *> UmbralKey::Instances;
 HHOOK UmbralKey::KeyboardHook;
 
-void UmbralKey::start() {
+void UmbralKey::InitializeKeyboardHook() {
   KeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, NULL, 0);
   if (KeyboardHook == NULL) {
     Logger::Abort(I18N{L"设定键盘钩子失败", L"Failed to install keyboard hook"},
                   L"UmbralKey::start");
-  }
-
-  MSG msg;
-  while (GetMessage(&msg, NULL, 0, 0)) {
-    TranslateMessage(&msg);
-    DispatchMessage(&msg);
   }
 }
 
@@ -84,8 +78,16 @@ void UmbralKey::ApplyConfig(const unordered_map<WORD, Array<WORD>> &config) {
   }
 }
 
+bool UmbralKey::disabledAll = false;
+
+void UmbralKey::ToggleAll() { disabledAll = !disabledAll; }
+
 // 成员
 void UmbralKey::umbral() {
+  if (disabledAll || disabled) {
+    return;
+  }
+
   static int _inputSize = sizeof(INPUT);
 
   UINT _size = static_cast<UINT>(size);
@@ -106,6 +108,7 @@ void UmbralKey::Initialize(WORD origin, const Array<WORD> &umbras) {
   }
 
   isInitialized = true;
+  disabled = false;
   count = 0;
   size = umbras.getSize();
 
@@ -134,6 +137,7 @@ void UmbralKey::Initialize(WORD origin, const Array<WORD> &umbras) {
 
 UmbralKey::UmbralKey() {
   isInitialized = false;
+  disabled = true;
   count = 0;
 
   size = 0;

@@ -10,4 +10,8 @@
 using namespace std;
 using namespace std::filesystem;
 
-unordered_map<WORD, Array<WORD>> LoadConfig();
+class Config {
+ public:
+  static unordered_map<WORD, Array<WORD>> Load();
+  static void OpenConfigFile();
+};
