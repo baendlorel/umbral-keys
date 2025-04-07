@@ -125,8 +125,8 @@ unordered_map<WORD, Array<WORD>> LoadConfig() {
       }
       if (origin == umbral) {
         wstring u = stow(umbras[i]);
-        wstring zh = format(L"行数:{} 原按键和影键不能相同，两者都是:[{}]",
-                            lineIdx, u);
+        wstring zh =
+            format(L"行数:{} 原按键和影键不能相同，两者都是:[{}]", lineIdx, u);
         wstring en = format(
             L"Line:{} Origin key and umbral key cannot be the same. For they "
             L"are both: [{}]",
@@ -142,7 +142,8 @@ unordered_map<WORD, Array<WORD>> LoadConfig() {
         if (umbras[i] == umbras[j]) {
           wstring u = stow(umbras[i]);
           wstring zh = format(L"行数:{} 影键重复：[{}]", lineIdx, u);
-          wstring en = format(L"Line:{} Duplicate umbral key: [{}]", lineIdx, u);
+          wstring en =
+              format(L"Line:{} Duplicate umbral key: [{}]", lineIdx, u);
           Logger::MsgBox(I18N{zh.c_str(), en.c_str()});
           return ieditAndReload(file, configPath);
         }
@@ -154,7 +155,11 @@ unordered_map<WORD, Array<WORD>> LoadConfig() {
     // 整合umbras为WORD数组
     Array<WORD> umbralKeycodes(umbras.getSize());
     for (size_t i = 0; i < umbras.getSize(); i++) {
-      umbralKeycodes.push(getKeyCode(umbras[i].c_str()));
+      WORD u = getKeyCode(umbras[i].c_str());
+      umbralKeycodes.push(u);
+      cout << " umbras["<<i<<"] = [" << umbras[i] << "]" << u << " >>  umbralKeycodes[i] = " << umbralKeycodes[i] << "   "
+           << (umbralKeycodes[i] == u)
+           << endl;
     }
 
     if (origin != 0 && umbras.getSize() > 0) {

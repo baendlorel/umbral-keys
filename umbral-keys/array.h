@@ -39,22 +39,43 @@ class Array {
 
  public:
   // 构造函数
-  Array() {
-    data = nullptr;
-    capacity = 0;
-    size = 0;
+  Array() : data(nullptr), capacity(0), size(0) {
+    cout << "Array constructor - normal" << endl;
   }
 
-  Array(size_t size) {
-    if (size <= 0) {
-      throw invalid_argument("[UmbralKeys Array] size must be greater than 0");
+  // 复制构造函数：深拷贝
+  Array(const Array &other) : size(other.size), data(new T[other.size]) {
+    cout << "Array constructor - copy" << endl;
+    for (size_t i = 0; i < size; ++i) {
+      data[i] = other.data[i];
     }
+  }
+
+  // 赋值运算符：深拷贝
+  Array &operator=(const Array &other) {
+    cout << "Array constructor - copy =" << endl;
+    if (this == &other) {
+      return *this;
+    }
+    delete[] data;
+    size = other.size;
     data = new T[size];
-    capacity = size;
-    this->size = size;
+    for (size_t i = 0; i < size; ++i) {
+      data[i] = other.data[i];
+    }
+    return *this;
+  }
+
+  Array(size_t capacity) : capacity(capacity), size(0) {
+    cout << "Array constructor - capacity" << endl;
+    if (capacity <= 0) {
+      throw invalid_argument("[UmbralKeys Array] capacity must be > 0");
+    }
+    data = new T[capacity];
   }
 
   Array(initializer_list<T> list) : size(list.size()), capacity(list.size()) {
+    cout << "Array constructor - list" << endl;
     data = new T[capacity];
     copy(list.begin(), list.end(), data);
   }

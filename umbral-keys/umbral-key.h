@@ -17,10 +17,11 @@ class UmbralKey {
   static unordered_map<WORD, UmbralKey *> Instances;
   static HHOOK KeyboardHook;
   static void start();
-  static UmbralKey *add(chars origin, const Array<chars>& umbras);
+  static UmbralKey *Add(chars origin, const Array<chars> &umbras);
+  static void ApplyConfig(const unordered_map<WORD, Array<WORD>>& config);
 
  private:
-  bool isInited;
+  bool isInitialized;
   size_t count;
   size_t size;
   INPUT *press;

@@ -7,7 +7,8 @@
 void initialize() {
   I18N::Initialize();
   unordered_map<WORD, Array<WORD>> umbralConfig = LoadConfig();
-  UmbralKey::add("capslock", Array<chars>{"ctrl", "space"});
+  //UmbralKey::Add("capslock", Array<chars>{"ctrl", "space"});
+  UmbralKey::ApplyConfig(umbralConfig);
   UmbralKey::start();
 }
 

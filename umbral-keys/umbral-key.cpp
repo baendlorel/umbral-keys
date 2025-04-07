@@ -62,9 +62,7 @@ void UmbralKey::start() {
   }
 }
 
-UmbralKey *UmbralKey::add(chars origin, const Array<chars> &umbras) {
-  UmbralKey *u = new UmbralKey();
-
+UmbralKey *UmbralKey::Add(chars origin, const Array<chars> &umbras) {
   size_t size = umbras.getSize();
   WORD _origin = getKeyCode(origin);
   Array<WORD> _umbras;
@@ -72,9 +70,18 @@ UmbralKey *UmbralKey::add(chars origin, const Array<chars> &umbras) {
     _umbras.push(getKeyCode(umbras[i]));
   }
 
+  UmbralKey *u = new UmbralKey();
   u->Initialize(_origin, _umbras);
   Instances[_origin] = u;  // 将实例添加到 map 中
   return u;
+}
+
+void UmbralKey::ApplyConfig(const unordered_map<WORD, Array<WORD>> &config) {
+  for (const auto &[origin, umbras] : config) {
+    UmbralKey *u = new UmbralKey();
+    u->Initialize(origin, umbras);
+    Instances[origin] = u;  // 将实例添加到 map 中
+  }
 }
 
 // 成员
@@ -93,12 +100,12 @@ void UmbralKey::umbral() {
 }
 
 void UmbralKey::Initialize(WORD origin, const Array<WORD> &umbras) {
-  if (isInited) {
+  if (isInitialized) {
     Logger::Log(message + " is already initialized!", "UmbralKey::Initialize");
     return;
   }
 
-  isInited = true;
+  isInitialized = true;
   count = 0;
   size = umbras.getSize();
 
@@ -126,7 +133,7 @@ void UmbralKey::Initialize(WORD origin, const Array<WORD> &umbras) {
 }
 
 UmbralKey::UmbralKey() {
-  isInited = false;
+  isInitialized = false;
   count = 0;
 
   size = 0;
