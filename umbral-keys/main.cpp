@@ -1,5 +1,6 @@
 ﻿#include <windows.h>
 
+#include "info.h"
 #include "I18N.h"
 #include "TrayManager.h"
 #include "UmbralKey.h"
@@ -19,15 +20,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
 
     case WM_COMMAND:
       switch (LOWORD(wParam)) {
+        case MenuItem::VIEW_CONFIG:
+          Logger::MsgBox(UmbralKey::ViewUmbras().c_str());
+          break;
         case MenuItem::EDIT_CONFIG:
-          // MessageBox(hWnd, L"配置重新加载（测试用）", L"umbralkeys", MB_OK);
           Config::OpenConfigFile();
           LoadConfig();
           break;
         case MenuItem::ENABLE:
           break;
         case MenuItem::ABOUT:
-          Logger::MsgBox(I18N::Get(L"影键", L"UmbralKeys"));
+          Logger::MsgBox(UK_ABOUT);
           break;
         case MenuItem::EXIT:
           g_tray.cleanup();

@@ -2,7 +2,7 @@
 #include <windows.h>
 #include "I18N.h"
 
-enum MenuItem { EDIT_CONFIG = 1, ENABLE, ABOUT, EXIT };
+enum MenuItem { VIEW_CONFIG = 1, EDIT_CONFIG, ENABLE, ABOUT, EXIT };
 
 class TrayManager {
  public:

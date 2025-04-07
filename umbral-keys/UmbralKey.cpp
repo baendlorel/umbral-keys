@@ -78,9 +78,15 @@ void UmbralKey::ApplyConfig(const unordered_map<WORD, Array<WORD>> &config) {
   }
 }
 
-bool UmbralKey::disabledAll = false;
+wstring UmbralKey::ViewUmbras() { 
+    wstring data;
+  for (const auto &[origin, u] : Instances) {
+      data.append(stow(u->message)).append(L"\n");
+  }
+  return data;
+}
 
-void UmbralKey::ToggleAll() { disabledAll = !disabledAll; }
+bool UmbralKey::disabledAll = false;
 
 // ≥…‘±
 void UmbralKey::umbral() {

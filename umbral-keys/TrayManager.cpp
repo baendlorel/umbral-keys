@@ -27,11 +27,12 @@ void TrayManager::showMenu() {
   GetCursorPos(&pt);
   HMENU m = CreatePopupMenu();
 
-  add(m, MenuItem::EDIT_CONFIG, L"编辑键盘映射", L"Edit key mapping");
+  add(m, MenuItem::VIEW_CONFIG, L"查看当前映射", L"View current key mappings");
+  add(m, MenuItem::EDIT_CONFIG, L"编辑映射", L"Edit key mappings");
   add(m, MenuItem::ENABLE, L"启用", L"Enable");
   addSeparator(m);
-  add(m, MenuItem::ABOUT, L"关于", L"About");
-  add(m, MenuItem::EXIT, L"退出影键", L"Exit");
+  add(m, MenuItem::ABOUT, L"关于影键", L"About UmbralKeys");
+  add(m, MenuItem::EXIT, L"退出", L"Exit");
 
   SetForegroundWindow(hWnd);  // 解决菜单点击后不消失的问题
   TrackPopupMenu(m, TPM_RIGHTBUTTON, pt.x, pt.y, 0, hWnd, NULL);

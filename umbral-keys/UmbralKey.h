@@ -20,6 +20,7 @@ class UmbralKey {
   static void InitializeKeyboardHook();
   static UmbralKey *Add(chars origin, const Array<chars> &umbras);
   static void ApplyConfig(const unordered_map<WORD, Array<WORD>> &config);
+  static wstring ViewUmbras();
 
   // È«¾Ö½ûÓÃ
   static bool disabledAll;
