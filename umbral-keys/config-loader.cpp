@@ -54,7 +54,6 @@ unordered_map<string, Array<string>> LoadConfig() {
           L"After saving and quit, UmbralKeys will try to load it again."});
       // 打开记事本，但这个是子进程，编辑完成后还要重新LoadConfig
       openNotepad(configPath);
-      // TODO 为何加了递归就报错中断？
       return LoadConfig();
     }
   }
@@ -87,7 +86,12 @@ unordered_map<string, Array<string>> LoadConfig() {
       wstring en =
           format(L"Line:{} No '=' found, fail to load key map configuration. Please edit config.txt and try again.",
                  lineIndex);
-      Logger::Abort(I18N{zh.c_str(), en.c_str()}, wh);
+      Logger::MsgBox(I18N{zh.c_str(), en.c_str()});
+      // 先关了再重新加载
+      file.close();
+      // 打开记事本，但这个是子进程，编辑完成后还要重新LoadConfig
+      openNotepad(configPath);
+      return LoadConfig();
     }
 
     string origin = line.substr(0, pos);
@@ -104,10 +108,10 @@ unordered_map<string, Array<string>> LoadConfig() {
         L"txt文件，请编辑后保存退出，影键会自动重试加载它",
         L"No valid config found. Now opening config.txt. Please edit it, save "
         L"it then quit Notepad. UmbralKeys will try to load it again."});
-    // 打开记事本，但这个是子进程，编辑完成后还要重新LoadConfig
-    openNotepad(configPath);
     // 先关了再重新加载
     file.close();
+    // 打开记事本，但这个是子进程，编辑完成后还要重新LoadConfig
+    openNotepad(configPath);
     return LoadConfig();
   }
 
