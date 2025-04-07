@@ -15,7 +15,7 @@ wstring Logger::ToDisplay(const WCHAR *from, const WCHAR *message) {
 
 string Logger::ToConsole(const WCHAR *from, const WCHAR *message) {
   wstring m;
-  if (!wstring(from).empty()){
+  if (!wstring(from).empty()) {
     m.append(L"[");
     m.append(from);
     m.append(L"] ");
@@ -40,7 +40,7 @@ string Logger::ToConsole(const WCHAR *from, const WCHAR *message) {
 string Logger::ToConsole(const char *from, const char *message) {
   string m = getCurrentTimestamp();
   m.append("  ");
-  if (!string(from).empty())  {
+  if (!string(from).empty()) {
     m.append("[");
     m.append(from);
     m.append("] ");
@@ -72,50 +72,46 @@ string Logger::getCurrentTimestamp() {
   }
 }
 
-void Logger::MsgBox(const WCHAR *message) {
-  MessageBox(NULL, ToDisplay(L"", message).c_str(), title, MB_OK | MB_TOPMOST);
-  cout << ToConsole(L"", message) << endl;
-}
-
 void Logger::MsgBox(const WCHAR *message, const WCHAR *from) {
   MessageBox(NULL, ToDisplay(from, message).c_str(), title, MB_OK | MB_TOPMOST);
   cout << ToConsole(from, message) << endl;
 }
+
+void Logger::MsgBox(const WCHAR *message) {
+  MsgBox(message, L"");  // 直接调用上面的函数
+}
+
+void Logger::Abort(const WCHAR *message, const WCHAR *from) {
+  MsgBox(message, from);
+  exit(1);
+}
+
+// 多国语言版
+void Logger::MsgBox(const I18N &message) { MsgBox(message.wstr()); }
+
+void Logger::MsgBox(const I18N &message, const I18N &from) {
+  MsgBox(message.wstr(), from.wstr());
+}
+
+void Logger::Abort(const I18N &&message, const WCHAR *from) {
+  Abort(message.wstr(), from);
+}
+
+// 仅控制台输出
 
 void Logger::Log(const char *message, const char *from) {
   cout << ToConsole(from, message) << endl;
 }
 
 void Logger::Log(const string &message, const char *from) {
-  cout << ToConsole(from, message.c_str()) << endl;
+  Log(message.c_str(), from);
 }
 
 void Logger::Log(const ostringstream &message, const char *from) {
-  cout << ToConsole(from, message.str().c_str()) << endl;
+  Log(message.str().c_str(), from);
 }
 
-void Logger::Abort(const WCHAR *message, const WCHAR *from) {
-  MsgBox(from, message);
-  throw runtime_error(ToConsole(from, message));
-}
-
-void Logger::Throw(const char *message, const char *from) {
-  throw runtime_error(ToConsole(from, message));
-}
-
-// 多国语言版
-void Logger::MsgBox(const I18N &message) {
-  MessageBox(NULL, ToDisplay(L"", message.wstr()).c_str(), title,
-             MB_OK | MB_TOPMOST);
-  cout << ToConsole(L"", message.wstr()) << endl;
-}
-void Logger::MsgBox(const I18N &message, const I18N &from) {
-  MessageBox(NULL, ToDisplay(from.wstr(), message.wstr()).c_str(), title,
-             MB_OK | MB_TOPMOST);
-  cout << ToConsole(from.wstr(), message.wstr()) << endl;
-}
-
-void Logger::Abort(const I18N &&message, const WCHAR *from) {
-  MsgBox(message.wstr(), from);
-  throw runtime_error(ToConsole(from, message.wstr()));
+void Logger::Err(const char *message, const char *from) {
+  cerr << ToConsole(from, message) << endl;
+  exit(1);
 }

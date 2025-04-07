@@ -8,7 +8,8 @@ void openNotepad(const path& filePath) {
 }
 
 unordered_map<string, Array<string>> LoadConfig() {
-  static const WCHAR* h = L"Config::load";
+  static const WCHAR* wh = L"Config::load";
+  static const char* h = "Config::load";
 
   path cwd = current_path();             // 获取当前工作目录
   path configPath = cwd / "config.txt";  // 拼接文件名
@@ -24,11 +25,11 @@ unordered_map<string, Array<string>> LoadConfig() {
       Logger::Abort(
           I18N{L"在程序文件夹内新建config.txt失败",
                L"Cannot create 'config.txt' (must be in same folder)"},
-          h);
+          wh);
     } else {
       newFile << "\xEF\xBB\xBF";  // 写入 UTF-8 BOM
       newFile << U8("# UmbralKeys 配置（'#'开头表示注释）\n");
-      newFile << U8("# UmbralKeys key mapping configuration \n");
+      newFile << U8("# UmbralKeys key mapping configuration ('#' means comment) \n");
       newFile << U8("# \n");
       newFile << U8("# 格式：origin=umbral1+umbral2+...\n");
       newFile << U8("# Format：origin=umbral1+umbral2+...\n");
@@ -45,12 +46,12 @@ unordered_map<string, Array<string>> LoadConfig() {
       newFile << U8("# capslock=ctrl+space\n");
       newFile << U8("# CapsLock = Ctrl + Space\n");
       newFile.close();
-      Logger::MsgBox(
-          I18N{L"config."
-               L"txt已经新建，现将开启config."
-               L"txt文件，请编辑后保存退出，影键会自动重试加载它",
-               L"config.txt is created. Please open it and write key maps. "
-               L"After saving and quit, UmbralKeys will try to load it again."});
+      Logger::MsgBox(I18N{
+          L"config."
+          L"txt已经新建，现将开启config."
+          L"txt文件，请编辑后保存退出，影键会自动重试加载它",
+          L"config.txt is created. Please open it and write key maps. "
+          L"After saving and quit, UmbralKeys will try to load it again."});
       // 打开记事本，但这个是子进程，编辑完成后还要重新LoadConfig
       openNotepad(configPath);
       // TODO 为何加了递归就报错中断？
@@ -60,14 +61,21 @@ unordered_map<string, Array<string>> LoadConfig() {
 
   ifstream file(configPath);
   if (!file.is_open()) {
-    Logger::Abort(I18N{L"无法打开config.txt", L"Cannot open 'config.txt'"}, h);
+    Logger::Abort(I18N{L"无法打开config.txt", L"Cannot open 'config.txt'"}, wh);
   }
 
   string line;
   unordered_map<string, Array<string>> umbralMap;
+  size_t lineIndex = 0;
   while (getline(file, line)) {
-    erase_if(line, ::isspace);
-
+    lineIndex++;
+    erase_if(line, [](unsigned char c) { return std::isspace(c); });
+    // 检查 UTF-8 BOM
+    if (line.size() >= 3 && static_cast<unsigned char>(line[0]) == 0xEF &&
+        static_cast<unsigned char>(line[1]) == 0xBB &&
+        static_cast<unsigned char>(line[2]) == 0xBF) {
+      line = line.substr(3);  // 去掉 BOM
+    }
     // 跳过空行和注释行
     if (line.at(0) == '#' || line.length() == 0) {
       continue;
@@ -75,7 +83,11 @@ unordered_map<string, Array<string>> LoadConfig() {
 
     size_t pos = line.find('=');
     if (pos == string::npos) {
-      continue;
+      wstring zh = format(L"行数:{} 没有找到'='符号，解析config.txt失败，请修改后重试", lineIndex);
+      wstring en =
+          format(L"Line:{} No '=' found, fail to load key map configuration. Please edit config.txt and try again.",
+                 lineIndex);
+      Logger::Abort(I18N{zh.c_str(), en.c_str()}, wh);
     }
 
     string origin = line.substr(0, pos);

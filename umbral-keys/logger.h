@@ -28,7 +28,7 @@ public:
   static void Log(const ostringstream &message, const char *from = "");
 
   static void Abort(const WCHAR *message, const WCHAR *from);
-  static void Throw(const char *message, const char *from);
+  static void Err(const char *message, const char *from);
 
   // ∂‡π˙”Ô—‘∞Ê
 
