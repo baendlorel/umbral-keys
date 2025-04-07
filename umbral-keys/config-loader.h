@@ -10,4 +10,4 @@
 using namespace std;
 using namespace std::filesystem;
 
-unordered_map<string, Array<string>> LoadConfig();
+unordered_map<WORD, Array<WORD>> LoadConfig();

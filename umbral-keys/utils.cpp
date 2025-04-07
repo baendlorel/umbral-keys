@@ -153,3 +153,11 @@ Array<string> split(const string &input, char delimiter) {
   }
   return arr;
 }
+
+wstring stow(const string &str) {
+  int size = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, nullptr, 0);
+  wstring wstr(size, 0);
+  MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, &wstr[0], size);
+  wstr.pop_back();  // ÒÆ³ý¶îÍâµÄ null ×Ö·û
+  return wstr;
+}

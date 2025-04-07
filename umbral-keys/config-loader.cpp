@@ -7,7 +7,7 @@ void openNotepad(const path& filePath) {
   system(command.c_str());
 }
 
-unordered_map<string, Array<string>> LoadConfig() {
+unordered_map<WORD, Array<WORD>> LoadConfig() {
   static const WCHAR* wh = L"Config::load";
   static const char* h = "Config::load";
   static auto oeditAndReload = [](ofstream& file, const path& filePath) {
@@ -25,7 +25,6 @@ unordered_map<string, Array<string>> LoadConfig() {
   path configPath = cwd / "config.txt";  // 拼接文件名
 
   Logger::Log(format("configPath: {}", configPath.string()), "Config::load");
-
 
   if (!exists(configPath)) {
     // 创建并打开文件
@@ -73,10 +72,10 @@ unordered_map<string, Array<string>> LoadConfig() {
   }
 
   string line;
-  unordered_map<string, Array<string>> umbralMap;
-  size_t lineIndex = 0;
+  unordered_map<WORD, Array<WORD>> umbralMap;
+  size_t lineIdx = 0;
   while (getline(file, line)) {
-    lineIndex++;
+    lineIdx++;
     erase_if(line, [](unsigned char c) { return std::isspace(c); });
     // 检查 UTF-8 BOM
     if (line.size() >= 3 && static_cast<unsigned char>(line[0]) == 0xEF &&
@@ -93,20 +92,73 @@ unordered_map<string, Array<string>> LoadConfig() {
     if (pos == string::npos) {
       wstring zh =
           format(L"行数:{} 没有找到'='符号，解析config.txt失败，请修改后重试",
-                 lineIndex);
+                 lineIdx);
       wstring en = format(
           L"Line:{} No '=' found, fail to load key map configuration. Please "
           L"edit config.txt and try again.",
-          lineIndex);
+          lineIdx);
       Logger::MsgBox(I18N{zh.c_str(), en.c_str()});
       return ieditAndReload(file, configPath);
     }
 
-    string origin = line.substr(0, pos);
+    WORD origin = getKeyCode(line.substr(0, pos).c_str());
     Array<string> umbras = split(line.substr(pos + 1), '+');
 
-    if (!origin.empty() && umbras.getSize() > 0) {
-      umbralMap[origin] = umbras;
+    // 原按键必须存在
+    if (origin == 0) {
+      wstring u = stow(line.substr(0, pos));
+      wstring zh = format(L"行数:{} 原按键无效：[{}]", lineIdx, u);
+      wstring en = format(L"Line:{} Invalid origin key: [{}]", lineIdx, u);
+      Logger::MsgBox(I18N{zh.c_str(), en.c_str()});
+      return ieditAndReload(file, configPath);
+    }
+
+    // 右侧不能有左侧的键、右侧按键必须存在
+    for (size_t i = 0; i < umbras.getSize(); i++) {
+      WORD umbral = getKeyCode(umbras[i].c_str());
+      if (umbral == 0) {
+        wstring u = stow(umbras[i]);
+        wstring zh = format(L"行数:{} 影键无效：[{}]", lineIdx, u);
+        wstring en = format(L"Line:{} Invalid umbral key: [{}]", lineIdx, u);
+        Logger::MsgBox(I18N{zh.c_str(), en.c_str()});
+        return ieditAndReload(file, configPath);
+      }
+      if (origin == umbral) {
+        wstring u = stow(umbras[i]);
+        wstring zh = format(L"行数:{} 原按键和影键不能相同，两者都是:[{}]",
+                            lineIdx, u);
+        wstring en = format(
+            L"Line:{} Origin key and umbral key cannot be the same. For they "
+            L"are both: [{}]",
+            lineIdx, u);
+        Logger::MsgBox(I18N{zh.c_str(), en.c_str()});
+        return ieditAndReload(file, configPath);
+      }
+    }
+
+    // 右侧不能有重复的键
+    for (size_t i = 0; i < umbras.getSize(); i++) {
+      for (size_t j = i + 1; j < umbras.getSize(); j++) {
+        if (umbras[i] == umbras[j]) {
+          wstring u = stow(umbras[i]);
+          wstring zh = format(L"行数:{} 影键重复：[{}]", lineIdx, u);
+          wstring en = format(L"Line:{} Duplicate umbral key: [{}]", lineIdx, u);
+          Logger::MsgBox(I18N{zh.c_str(), en.c_str()});
+          return ieditAndReload(file, configPath);
+        }
+      }
+    }
+
+    // 到这里认为配置是正常的
+
+    // 整合umbras为WORD数组
+    Array<WORD> umbralKeycodes(umbras.getSize());
+    for (size_t i = 0; i < umbras.getSize(); i++) {
+      umbralKeycodes.push(getKeyCode(umbras[i].c_str()));
+    }
+
+    if (origin != 0 && umbras.getSize() > 0) {
+      umbralMap[origin] = umbralKeycodes;
     }
   }
 
