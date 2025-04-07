@@ -78,10 +78,10 @@ void UmbralKey::ApplyConfig(const unordered_map<WORD, Array<WORD>> &config) {
   }
 }
 
-wstring UmbralKey::ViewUmbras() { 
-    wstring data;
+wstring UmbralKey::ViewUmbras() {
+  wstring data = L"当前生效的键映射（Activated Key Mappings）：\n\n";
   for (const auto &[origin, u] : Instances) {
-      data.append(stow(u->message)).append(L"\n");
+    data.append(stow(u->message)).append(L"\n");
   }
   return data;
 }

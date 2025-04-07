@@ -1,21 +1,21 @@
 ﻿#include <windows.h>
 
-#include "info.h"
 #include "I18N.h"
 #include "TrayManager.h"
 #include "UmbralKey.h"
 #include "config.h"
+#include "info.h"
 #include "utils.h"
 
 void LoadConfig() { UmbralKey::ApplyConfig(Config::Load()); }
 
-TrayManager g_tray;
+TrayManager tray;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
                          LPARAM lParam) {
   switch (message) {
     case WM_CREATE:
-      g_tray.init(hWnd);
+      tray.init(hWnd);
       break;
 
     case WM_COMMAND:
@@ -24,6 +24,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
           Logger::MsgBox(UmbralKey::ViewUmbras().c_str());
           break;
         case MenuItem::EDIT_CONFIG:
+          // TODO 核查此处为什么闪退
           Config::OpenConfigFile();
           LoadConfig();
           break;
@@ -33,7 +34,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
           Logger::MsgBox(UK_ABOUT);
           break;
         case MenuItem::EXIT:
-          g_tray.cleanup();
+          tray.cleanup();
           PostQuitMessage(0);
           break;
       }
@@ -41,12 +42,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
 
     case WM_USER + 1:
       if (lParam == WM_RBUTTONUP) {
-        g_tray.showMenu();
+        tray.showMenu();
       }
       break;
 
     case WM_DESTROY:
-      g_tray.cleanup();
+      tray.cleanup();
       PostQuitMessage(0);
       break;
 

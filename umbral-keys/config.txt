@@ -16,3 +16,4 @@
 # capslock=ctrl+space
 # CapsLock = Ctrl + Space
 CapsLock = Ctrl + Space
+A=b+c
