@@ -1,5 +1,5 @@
 #pragma once
-#include "logger.h"
+#include "Logger.h"
 
 const WCHAR *Logger::title = L"Ó°¼ü / UmbralKeys";
 

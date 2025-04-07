@@ -1,5 +1,5 @@
 #pragma once
-#include "config-loader.h"
+#include "config.h"
 #define U8(x) reinterpret_cast<const char*>(u8##x)
 
 void openNotepad(const path& filePath) {

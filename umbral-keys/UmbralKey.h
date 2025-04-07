@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <unordered_map>
-#include "array.h"
+#include "Array.h"
 
 typedef const char *chars;
 #define CHARS new const char*

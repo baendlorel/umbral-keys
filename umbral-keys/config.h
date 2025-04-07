@@ -1,5 +1,5 @@
 #pragma once
-#include "logger.h"
+#include "Logger.h"
 #include "utils.h"
 #include <filesystem>
 #include <fstream>

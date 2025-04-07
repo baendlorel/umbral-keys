@@ -6,7 +6,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "array.h"
+#include "Array.h"
 
 using namespace std;
 

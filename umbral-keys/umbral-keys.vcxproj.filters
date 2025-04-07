@@ -24,39 +24,39 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="umbral-key.h">
+    <ClCompile Include="UmbralKey.h">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="umbral-key.cpp">
+    <ClCompile Include="UmbralKey.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="i18n.cpp">
+    <ClCompile Include="I18N.cpp">
       <Filter>源文件\misc</Filter>
     </ClCompile>
-    <ClCompile Include="logger.cpp">
+    <ClCompile Include="Logger.cpp">
       <Filter>源文件\misc</Filter>
     </ClCompile>
     <ClCompile Include="utils.cpp">
       <Filter>源文件\misc</Filter>
     </ClCompile>
-    <ClCompile Include="config-loader.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="config.cpp">
+      <Filter>源文件\misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="config-loader.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="array.h">
+    <ClInclude Include="Array.h">
       <Filter>头文件\misc</Filter>
     </ClInclude>
-    <ClInclude Include="i18n.h">
+    <ClInclude Include="I18N.h">
       <Filter>头文件\misc</Filter>
     </ClInclude>
-    <ClInclude Include="logger.h">
+    <ClInclude Include="Logger.h">
       <Filter>头文件\misc</Filter>
     </ClInclude>
     <ClInclude Include="utils.h">
+      <Filter>头文件\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
       <Filter>头文件\misc</Filter>
     </ClInclude>
   </ItemGroup>
