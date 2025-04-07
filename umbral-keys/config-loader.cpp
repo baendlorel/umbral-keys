@@ -157,13 +157,10 @@ unordered_map<WORD, Array<WORD>> LoadConfig() {
     for (size_t i = 0; i < umbras.getSize(); i++) {
       WORD u = getKeyCode(umbras[i].c_str());
       umbralKeycodes.push(u);
-      cout << " umbras["<<i<<"] = [" << umbras[i] << "]" << u << " >>  umbralKeycodes[i] = " << umbralKeycodes[i] << "   "
-           << (umbralKeycodes[i] == u)
-           << endl;
     }
 
     if (origin != 0 && umbras.getSize() > 0) {
-      umbralMap[origin] = umbralKeycodes;
+      umbralMap.emplace(origin, umbralKeycodes);
     }
   }
 
