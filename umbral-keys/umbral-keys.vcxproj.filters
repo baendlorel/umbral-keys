@@ -19,11 +19,11 @@
     <Filter Include="头文件\misc">
       <UniqueIdentifier>{9f9da42d-00f2-4b5b-8fb3-2d8ec4dfbe50}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\tray">
-      <UniqueIdentifier>{5119d2a2-3adf-4c55-9505-58b719626f8d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\tray">
+    <Filter Include="源文件\core">
       <UniqueIdentifier>{65923514-b140-4439-847c-a4a8f596599f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\core">
+      <UniqueIdentifier>{5119d2a2-3adf-4c55-9505-58b719626f8d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -45,14 +45,14 @@
     <ClCompile Include="utils.cpp">
       <Filter>源文件\misc</Filter>
     </ClCompile>
-    <ClCompile Include="config.cpp">
-      <Filter>源文件\misc</Filter>
-    </ClCompile>
     <ClCompile Include="TrayManager.cpp">
-      <Filter>源文件\tray</Filter>
+      <Filter>源文件\core</Filter>
     </ClCompile>
     <ClCompile Include="tray.cpp">
-      <Filter>源文件\tray</Filter>
+      <Filter>源文件\core</Filter>
+    </ClCompile>
+    <ClCompile Include="config.cpp">
+      <Filter>源文件\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,20 +68,20 @@
     <ClInclude Include="utils.h">
       <Filter>头文件\misc</Filter>
     </ClInclude>
-    <ClInclude Include="config.h">
-      <Filter>头文件\misc</Filter>
-    </ClInclude>
     <ClInclude Include="info.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="TrayManager.h">
-      <Filter>头文件\tray</Filter>
+      <Filter>头文件\core</Filter>
     </ClInclude>
     <ClInclude Include="tray.h">
-      <Filter>头文件\tray</Filter>
+      <Filter>头文件\core</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>头文件\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,25 +1,25 @@
 #pragma once
-#include "i18n.h"
 #include <chrono> // 用于获取时间
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <string>
 #include <windows.h>
+#include <boost/stacktrace.hpp>
+#include "i18n.h"
 
 using namespace std;
 
 class Logger {
-private:
-  static const WCHAR *title;
-
+ private:
   static wstring ToDisplay(const WCHAR *from, const WCHAR *message);
 
   static string ToConsole(const WCHAR *from, const WCHAR *message);
   static string ToConsole(const char *from, const char *message);
 
-  static string getCurrentTimestamp();
+  static string getDateTimeString();
 
-public:
+ public:
   static void MsgBox(const WCHAR *message);
   static void MsgBox(const WCHAR *message, const WCHAR *from);
 
@@ -31,9 +31,11 @@ public:
   static void Err(const char *message, const char *from);
 
   // 多国语言版
-
   static void MsgBox(const I18N &message);
   static void MsgBox(const I18N &message, const I18N &from);
   static void Abort(const I18N &&message, const WCHAR *from);
-};
 
+
+  // 崩溃日志记录
+  static void SaveError(const std::string &message);
+};

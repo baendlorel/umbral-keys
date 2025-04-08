@@ -14,8 +14,8 @@
 #define UK_STAT_EN                                                           \
   L"For communication and learning purposes only. It is prohibited for any " \
   L"illegal use. All copyrights belong to the original author."
-#define UK_CREATE_DT L"诞生时间（Create Date）: 2025年4月7日"
-#define UK_UPDATE_DT L"更新时间（Update Date）: 2025年4月7日"
+#define UK_CREATE_DT L"诞生时间（Create Date）: 2025-04-07"
+#define UK_UPDATE_DT L"更新时间（Update Date）: 2025-04-07"
 
 // CW UK_ABOUT =
 //    L"影键 UmbralKeys\n"
@@ -30,8 +30,14 @@
 //    prohibited for any illegal use. All copyrights belong to the original
 //    author.";
 
-constexpr const wchar_t* UK_ABOUT = L"版本（Version）：" UK_VER N L"作者（Author）：" UK_AUTHOR
-        N L"许可（License）：" UK_LICENSE N N UK_DESC_ZH N UK_STAT_ZH N
-            UK_DESC_EN N UK_STAT_EN N N UK_CREATE_DT N UK_UPDATE_DT;
+constexpr const wchar_t* UK_ABOUT_ZH =
+    L"版本：" UK_VER N L"作者：" UK_AUTHOR N L"许可：" UK_LICENSE N N UK_DESC_ZH
+        N UK_STAT_ZH N
+            N L"诞生时间：" UK_CREATE_DT N L"更新时间：" UK_UPDATE_DT;
+
+constexpr const wchar_t* UK_ABOUT_EN =
+    L"Version: " UK_VER N L"Author: " UK_AUTHOR N L"License: " UK_LICENSE N N
+        UK_DESC_EN N UK_STAT_EN N
+            N L"Create Date: " UK_CREATE_DT N L"Update Date: " UK_UPDATE_DT;
 
 #undef N

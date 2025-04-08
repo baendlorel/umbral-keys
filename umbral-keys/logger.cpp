@@ -1,7 +1,16 @@
 #pragma once
 #include "Logger.h"
 
-const WCHAR *Logger::title = L"Ó°¼ü / UmbralKeys";
+const char* logFileName = "crash_log.log";
+
+void Logger::SaveError(const string &message) {
+  ofstream logfile(logFileName, ios::app);
+  logfile << "[" << getDateTimeString() << "] " << message << endl;
+  boost::stacktrace::stacktrace st(0, 128);
+  logfile << st << endl;
+};
+
+const WCHAR * title = L"Ó°¼ü / UmbralKeys";
 
 wstring Logger::ToDisplay(const WCHAR *from, const WCHAR *message) {
   wstring m;
@@ -33,12 +42,12 @@ string Logger::ToConsole(const WCHAR *from, const WCHAR *message) {
   WideCharToMultiByte(CP_UTF8, 0, m.c_str(), -1, &result[0], size_needed, NULL,
                       NULL);
 
-  string head = getCurrentTimestamp();
+  string head = getDateTimeString();
   return head.append("  ").append(result);
 }
 
 string Logger::ToConsole(const char *from, const char *message) {
-  string m = getCurrentTimestamp();
+  string m = getDateTimeString();
   m.append("  ");
   if (!string(from).empty()) {
     m.append("[");
@@ -49,7 +58,7 @@ string Logger::ToConsole(const char *from, const char *message) {
   return m;
 }
 
-string Logger::getCurrentTimestamp() {
+string Logger::getDateTimeString() {
   using namespace std::chrono;
   auto now = system_clock::now();
   auto ms = duration_cast<milliseconds>(now.time_since_epoch()) % 1000;
