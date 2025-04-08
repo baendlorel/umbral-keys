@@ -21,10 +21,14 @@ class UmbralKey {
   static UmbralKey *Add(chars origin, const Array<chars> &umbras);
   static void ApplyConfig(const unordered_map<WORD, Array<WORD>> &config);
   static wstring ViewUmbras();
+  static void ClearUmbras();
 
   // È«¾Ö½ûÓÃ
   static bool disabledAll;
-  static inline void ToggleAll() { disabledAll = !disabledAll; };
+  static inline bool ToggleAll() {
+    disabledAll = !disabledAll;
+    return disabledAll;
+  };
   static inline bool GetDisabledAll() { return disabledAll; };
 
  private:
@@ -41,7 +45,11 @@ class UmbralKey {
 
  public:
   void umbral();
-  inline void toggle() { disabled = !disabled; };
+  inline bool valid() { return isInitialized && !disabled && !disabledAll; };
+  inline bool toggle() {
+    disabled = !disabled;
+    return disabled;
+  };
   inline bool getDisabled() const { return disabled; }
 
  private:

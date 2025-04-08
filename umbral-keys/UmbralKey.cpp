@@ -34,7 +34,15 @@ LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
     }
 
     UmbralKey *u = UmbralKey::Instances[(WORD)(pKeyboard->vkCode & 0xFFFF)];
-    if (u != nullptr && (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)) {
+
+    // 检测umbra对象是否存在，并合并其双重disable的状态
+    bool validUmbra = u != nullptr && u->valid();
+
+    // 判断是否按下了键，且是用户真实按下的而非SendInput触发
+    bool pressingKey = (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) &&
+                       (pKeyboard->flags & LLKHF_INJECTED) == 0;
+
+    if (validUmbra && pressingKey) {
       u->umbral();
       return 1;  // 返回 1 会阻止 CapsLock 键的默认行为
     }
@@ -71,7 +79,7 @@ UmbralKey *UmbralKey::Add(chars origin, const Array<chars> &umbras) {
 }
 
 void UmbralKey::ApplyConfig(const unordered_map<WORD, Array<WORD>> &config) {
-  Instances.clear();  // 清空之前的实例
+  ClearUmbras();  // 清空之前的实例
   for (const auto &[origin, umbras] : config) {
     UmbralKey *u = new UmbralKey();
     u->Initialize(origin, umbras);
@@ -80,7 +88,8 @@ void UmbralKey::ApplyConfig(const unordered_map<WORD, Array<WORD>> &config) {
 }
 
 wstring UmbralKey::ViewUmbras() {
-  wstring data = L"当前生效的键映射（Activated Key Mappings）：\n\n";
+  I18N head{L"当前生效的键映射：\n\n", L"Activated Key Mappings: \n\n"};
+  wstring data = head.wstr();
   size_t index = 0;
   for (const auto &[origin, u] : Instances) {
     index++;
@@ -90,14 +99,17 @@ wstring UmbralKey::ViewUmbras() {
   return data;
 }
 
+void UmbralKey::ClearUmbras() {
+  for (auto &[_, u] : Instances) {
+    delete u;
+  }
+  Instances.clear();
+}
+
 bool UmbralKey::disabledAll = false;
 
 // 成员
 void UmbralKey::umbral() {
-  if (disabledAll || disabled) {
-    return;
-  }
-
   static int _inputSize = sizeof(INPUT);
 
   UINT _size = static_cast<UINT>(size);

@@ -133,6 +133,7 @@
     <ClCompile Include="I18N.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="tray.cpp" />
     <ClCompile Include="TrayManager.cpp" />
     <ClCompile Include="UmbralKey.h" />
     <ClCompile Include="UmbralKey.cpp" />
@@ -144,6 +145,8 @@
     <ClInclude Include="I18N.h" />
     <ClInclude Include="info.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="tray.h" />
     <ClInclude Include="TrayManager.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
@@ -152,6 +155,15 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="app.ico" />
+    <Image Include="logo.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
