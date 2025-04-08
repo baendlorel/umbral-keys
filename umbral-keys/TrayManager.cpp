@@ -29,6 +29,7 @@ void TrayManager::showMenu() {
 
   add(m, MenuItem::VIEW_CONFIG, L"查看当前映射", L"View current key mappings");
   add(m, MenuItem::EDIT_CONFIG, L"编辑映射", L"Edit key mappings");
+  add(m, MenuItem::RELOAD, L"重新加载映射配置", L"Reload key mappings");
   add(m, MenuItem::ENABLE, L"启用", L"Enable");
   addSeparator(m);
   add(m, MenuItem::ABOUT, L"关于影键", L"About UmbralKeys");

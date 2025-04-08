@@ -17,3 +17,4 @@
 # CapsLock = Ctrl + Space
 CapsLock = Ctrl + Space
 A=b+c
+b=t+u

@@ -5,8 +5,6 @@
 void Config::OpenConfigFile() {
   path cwd = current_path();             // 获取当前工作目录
   path configPath = cwd / "config.txt";  // 拼接文件名
-  string command = "notepad.exe " + configPath.string();
-  //system(command.c_str());
   ShellExecute(NULL, L"open", configPath.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 

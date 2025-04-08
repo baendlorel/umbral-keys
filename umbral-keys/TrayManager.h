@@ -1,8 +1,9 @@
 #pragma once
 #include <windows.h>
+
 #include "I18N.h"
 
-enum MenuItem { VIEW_CONFIG = 1, EDIT_CONFIG, ENABLE, ABOUT, EXIT };
+enum MenuItem { VIEW_CONFIG = 1, EDIT_CONFIG, RELOAD, ENABLE, ABOUT, EXIT };
 
 class TrayManager {
  public:

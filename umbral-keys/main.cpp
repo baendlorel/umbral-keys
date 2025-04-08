@@ -24,9 +24,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
           Logger::MsgBox(UmbralKey::ViewUmbras().c_str());
           break;
         case MenuItem::EDIT_CONFIG:
-          // TODO 核查此处为什么闪退
           Config::OpenConfigFile();
+          break;
+        case MenuItem::RELOAD:
           LoadConfig();
+          Logger::MsgBox(I18N::Get(L"重新加载映射配置成功",
+                                   L"Reload key mappings successfully"));
           break;
         case MenuItem::ENABLE:
           break;
@@ -57,8 +60,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
   return 0;
 }
 
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-                     LPSTR lpCmdLine, int nCmdShow) {
+int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
+                     _In_ LPSTR lpCmdLine, _In_ int nCmdShow) {
   const wchar_t CLASS_NAME[] = L"UmbralKeysWindow";
 
   WNDCLASS wc = {};
@@ -78,6 +81,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   I18N::Initialize();
   LoadConfig();
   UmbralKey::InitializeKeyboardHook();
+  wstring info = I18N::Get(
+      L"影键（UmbralKeys）启动成功！可以右键点击系统托盘图标查看菜单\n\n",
+      L"UmbralKeys is launched! Right click the tray icon to view menu\n\n");
+  Logger::MsgBox(info.append(UmbralKey::ViewUmbras()).c_str());
 
   MSG msg = {};
   while (GetMessage(&msg, nullptr, 0, 0)) {
@@ -87,8 +94,3 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   return (int)msg.wParam;
 }
-
-// int main() {
-//   initialize();
-//   return 0;
-// }
