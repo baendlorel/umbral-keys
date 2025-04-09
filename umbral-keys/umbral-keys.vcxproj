@@ -132,6 +132,7 @@
     <ClCompile Include="config.cpp" />
     <ClCompile Include="ConfigEditor.cpp" />
     <ClCompile Include="I18N.cpp" />
+    <ClCompile Include="InfoWindow.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="tray.cpp" />
@@ -139,6 +140,7 @@
     <ClCompile Include="UmbralKey.h" />
     <ClCompile Include="UmbralKey.cpp" />
     <ClCompile Include="utils.cpp" />
+    <ClCompile Include="winUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Array.h" />
@@ -146,11 +148,13 @@
     <ClInclude Include="ConfigEditor.h" />
     <ClInclude Include="I18N.h" />
     <ClInclude Include="consts.h" />
+    <ClInclude Include="InfoWindow.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="tray.h" />
     <ClInclude Include="TrayManager.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="winUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />

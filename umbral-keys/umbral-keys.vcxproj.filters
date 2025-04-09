@@ -66,6 +66,12 @@
     <ClCompile Include="ConfigEditor.cpp">
       <Filter>源文件\windows</Filter>
     </ClCompile>
+    <ClCompile Include="InfoWindow.cpp">
+      <Filter>源文件\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="winUtils.cpp">
+      <Filter>源文件\windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Array.h">
@@ -97,6 +103,12 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="InfoWindow.h">
+      <Filter>头文件\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="winUtils.h">
+      <Filter>头文件\windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

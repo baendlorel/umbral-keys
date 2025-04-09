@@ -19,5 +19,3 @@ string join(string *arr, size_t length, string delimiter = ", ");
 Array<string> split(const string &input, char delimiter = ',');
 
 wstring stow(const string &str);
-
-void centerWindow(HWND hwnd);

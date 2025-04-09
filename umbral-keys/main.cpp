@@ -31,10 +31,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
     return 0;
   }
 
-  HICON hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_APP_ICON));
-
-  SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);  // 大图标（Alt+Tab）
-  SendMessage(hWnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);  // 小图标（标题栏）
+  setIcon(hWnd);
 
   MSG msg = {};
   try {

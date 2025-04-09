@@ -3,12 +3,12 @@
 // 菜单项回调函数
 void UpdateMenuItemState(HMENU hMenu, UINT itemID, bool isDisabled) {
   // 更新菜单项勾选状态
-  CheckMenuItem(hMenu, itemID,
-                MF_BYCOMMAND | (isDisabled ? MF_UNCHECKED : MF_CHECKED));
+  long checkState = isDisabled ? MF_UNCHECKED : MF_CHECKED;
+  CheckMenuItem(hMenu, itemID, MF_BYCOMMAND | checkState);
 
   // 更新菜单项的文字（可以显示“启用”或“禁用”）
-  ModifyMenu(hMenu, itemID, MF_BYCOMMAND | MF_STRING, itemID,
-             isDisabled ? L"影键已启用" : L"影键已禁用");
+  const WCHAR* label = isDisabled ? L"影键已启用" : L"影键已禁用";
+  ModifyMenu(hMenu, itemID, MF_BYCOMMAND | MF_STRING, itemID, label);
 }
 
 void InitializeUmbras() {
@@ -26,10 +26,12 @@ void InitializeUmbras() {
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
                          LPARAM lParam) {
   static TrayManager tray;
-  HINSTANCE hInstance = (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE);
-
+  static LPWSTR TMPL_CONF_EDT = MAKEINTRESOURCE(IDD_CONFIG_EDITOR);
+  static LPWSTR TMPL_ABOUT = MAKEINTRESOURCE(IDD_ABOUT);
+  static HINSTANCE hInst = (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE);
 
   INT_PTR ret;
+
   wstring msg;
   switch (message) {
     case WM_CREATE:
@@ -43,22 +45,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
           Logger::MsgBox(msg.c_str());
           break;
         case MenuItem::EDIT_CONFIG:
-          //Config::OpenConfigFile();
-          //ShowConfigEditorWindow(hInstance);
-          //DialogBox(GetModuleHandle(NULL),               // 应用实例句柄
-          //          MAKEINTRESOURCE(IDD_CONFIG_DIALOG),  // 对话框资源 ID
-          //          hWnd,                                // 父窗口句柄
-          //          ConfigEditorProc                     // 对话框过程函数
-          //);
-          ret = DialogBox(hInstance, MAKEINTRESOURCE(IDD_CONFIG_EDITOR), hWnd,
-                          ConfigEditorProc);
-          if (ret == -1) {
-            DWORD err = GetLastError();
-            wchar_t msg[256];
-            wsprintf(msg, L"DialogBox failed. Error = %lu", err);
-            MessageBox(NULL, msg, L"Error", MB_OK | MB_ICONERROR);
-          }
-
+          DialogBox(hInst, TMPL_CONF_EDT, hWnd, ConfigEditorProc);
           Logger::MsgBox(L"阻塞的");
           break;
         case MenuItem::RELOAD:
@@ -72,7 +59,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
           UmbralKey::ToggleAll();
           break;
         case MenuItem::ABOUT:
-          Logger::MsgBox(I18N{UK_ABOUT_ZH, UK_ABOUT_EN});
+          //Logger::MsgBox(I18N{UK_ABOUT_ZH, UK_ABOUT_EN});
+          ret = DialogBox(hInst, TMPL_ABOUT, hWnd, InfoWindowProc);
+          if (ret == -1) {
+            Logger::MsgBox(L"fail");
+          }
           break;
         case MenuItem::EXIT:
           tray.cleanup();

@@ -10,6 +10,7 @@
 #include "utils.h"
 #include "resource.h"
 #include "ConfigEditor.h"
+#include "InfoWindow.h"
 
 inline void LoadConfig() { UmbralKey::ApplyConfig(Config::Load()); }
 
