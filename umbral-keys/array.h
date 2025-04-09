@@ -75,12 +75,6 @@ class Array {
     data = new T[capacity];
   }
 
-  Array(initializer_list<T> list) : size(list.size()), capacity(list.size()) {
-    // cout << "Array constructor - list" << endl;
-    data = new T[capacity];
-    copy(list.begin(), list.end(), data);
-  }
-
   // Îö¹¹º¯Êý
   ~Array() { delete[] data; }
 

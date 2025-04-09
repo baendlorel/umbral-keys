@@ -148,7 +148,6 @@
     <ClInclude Include="consts.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="resource1.h" />
     <ClInclude Include="tray.h" />
     <ClInclude Include="TrayManager.h" />
     <ClInclude Include="utils.h" />
@@ -160,14 +159,13 @@
     <Text Include="..\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="ConfigEditor.rc" />
-    <ResourceCompile Include="resource.rc">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-    </ResourceCompile>
+    <Image Include="app.ico" />
+    <Image Include="icon1.ico" />
+    <Image Include="icon2.ico" />
+    <Image Include="logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="app.ico" />
-    <Image Include="logo.png" />
+    <ResourceCompile Include="umbral-keys.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

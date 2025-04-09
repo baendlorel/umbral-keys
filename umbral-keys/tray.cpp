@@ -50,15 +50,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
           //          hWnd,                                // 父窗口句柄
           //          ConfigEditorProc                     // 对话框过程函数
           //);
-          ret = DialogBox(hInstance,
-                          MAKEINTRESOURCE(IDD_CONFIG_EDITOR),
-                                  hWnd,
-                    ConfigEditorProc);
+          ret = DialogBox(hInstance, MAKEINTRESOURCE(IDD_CONFIG_EDITOR), hWnd,
+                          ConfigEditorProc);
           if (ret == -1) {
-            DWORD err = GetLastError();  // 获取详细错误信息
-            wchar_t buf[256];
-            wsprintf(buf, L"Error code: %lu", err);
-            MessageBox(NULL, buf, L"GetLastError", MB_OK);
+            DWORD err = GetLastError();
+            wchar_t msg[256];
+            wsprintf(msg, L"DialogBox failed. Error = %lu", err);
+            MessageBox(NULL, msg, L"Error", MB_OK | MB_ICONERROR);
           }
 
           Logger::MsgBox(L"阻塞的");

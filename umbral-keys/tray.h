@@ -8,6 +8,7 @@
 #include "config.h"
 #include "consts.h"
 #include "utils.h"
+#include "resource.h"
 #include "ConfigEditor.h"
 
 inline void LoadConfig() { UmbralKey::ApplyConfig(Config::Load()); }

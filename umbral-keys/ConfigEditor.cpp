@@ -56,6 +56,7 @@
 //   ShowWindow(hwnd, SW_SHOWNORMAL);
 //   UpdateWindow(hwnd);
 // }
+
 INT_PTR CALLBACK ConfigEditorProc(HWND hDlg, UINT message, WPARAM wParam,
                                   LPARAM lParam) {
   static HINSTANCE hInstance =
@@ -63,6 +64,7 @@ INT_PTR CALLBACK ConfigEditorProc(HWND hDlg, UINT message, WPARAM wParam,
   static HICON hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_APP_ICON));
   switch (message) {
     case WM_INITDIALOG:
+      MessageBox(NULL, L"centerWindow", L"centerWindow", MB_OK);
       centerWindow(hDlg);
       //SetDlgItemTextW(hDlg, IDC_EDIT_INPUT, L"ƒ¨»œ≈‰÷√ƒ⁄»›...");
       SendMessage(hDlg, WM_SETICON, ICON_BIG,
