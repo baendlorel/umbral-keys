@@ -1,20 +1,13 @@
-﻿# UmbralKeys 配置（'#'开头表示注释）
-# UmbralKeys key mapping configuration ('#' means comment) 
+﻿# UmbralKeys    ã '#'  ͷ  ʾע ͣ 
+#   ʽ  origin=umbral1+umbral2+...
+#   Сд   ǿ  Ե 
+#   ͬ     ͼӺ ֮    пո Ҳ ǿ  Ե 
+#  Ⱥ    ֻ    һ    
+#  Ⱥ  ұ߲      ظ  ļ 
+# ֧ ֵİ     ֱ Ӱ    Ҳ   д    0-9, A-Z, f1-12, enter, esc, space, tab, shift, ctrl, alt, capslock, backspace, delete, insert, home, end, pageup, pagedown, left, right, up, down
 # 
-# 格式：origin=umbral1+umbral2+...
-# Format：origin=umbral1+umbral2+...
-# 
-# 大小写都是可以的
-# Upper case or lower case matters not 
-# 
-# 不同按键和加号之间带有空格也是可以的
-# Spaces between key names and plus signs are allowed 
-# 
-# 下方的两个配置案例等价
-# Two configurations bellow are equivalent
-# 
+ #  ·          ð    ȼ 
 # capslock=ctrl+space
 # CapsLock = Ctrl + Space
 CapsLock = Ctrl + Space
-p=b+c
 

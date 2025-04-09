@@ -25,6 +25,15 @@
     <Filter Include="头文件\core">
       <UniqueIdentifier>{5119d2a2-3adf-4c55-9505-58b719626f8d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\windows">
+      <UniqueIdentifier>{b73e132a-062d-45d4-9fe5-1ef6a9cf6b20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\windows">
+      <UniqueIdentifier>{c590c772-1223-4f26-8c0d-daedddf4dfb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="资源文件\windows">
+      <UniqueIdentifier>{120147c5-583f-4cb4-a43d-715f3f7c4f1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,6 +63,9 @@
     <ClCompile Include="config.cpp">
       <Filter>源文件\core</Filter>
     </ClCompile>
+    <ClCompile Include="ConfigEditor.cpp">
+      <Filter>源文件\windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Array.h">
@@ -68,9 +80,6 @@
     <ClInclude Include="utils.h">
       <Filter>头文件\misc</Filter>
     </ClInclude>
-    <ClInclude Include="info.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="TrayManager.h">
       <Filter>头文件\core</Filter>
     </ClInclude>
@@ -82,6 +91,12 @@
     </ClInclude>
     <ClInclude Include="config.h">
       <Filter>头文件\core</Filter>
+    </ClInclude>
+    <ClInclude Include="consts.h">
+      <Filter>头文件\core</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigEditor.h">
+      <Filter>头文件\windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +111,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="ConfigEditor.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
   </ItemGroup>

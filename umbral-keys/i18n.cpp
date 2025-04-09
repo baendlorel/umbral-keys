@@ -27,3 +27,7 @@ void I18N::Initialize() {
 const WCHAR *I18N::Get(const WCHAR *zh, const WCHAR *en) {
   return isChinese ? zh : en;
 }
+
+const char *I18N::Get(const char *zh, const char *en) {
+  return isChinese ? zh : en;
+}

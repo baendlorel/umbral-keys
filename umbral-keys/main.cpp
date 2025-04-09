@@ -5,7 +5,6 @@
 
 int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPSTR lpCmdLine, _In_ int nCmdShow) {
-
   const wchar_t* CLASS_NAME = L"UmbralKeysWindow";
 
   WNDCLASS wc = {};
@@ -36,8 +35,8 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
   SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);  // 大图标（Alt+Tab）
   SendMessage(hWnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);  // 小图标（标题栏）
-  MSG msg = {};
 
+  MSG msg = {};
   try {
     InitializeUmbras();
     while (GetMessage(&msg, nullptr, 0, 0)) {
@@ -47,6 +46,5 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
   } catch (const exception& e) {
     Logger::SaveError("failed: " + string(e.what()));
   }
-
   return (int)msg.wParam;
 }

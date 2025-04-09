@@ -29,7 +29,7 @@ unordered_map<WORD, Array<WORD>> Config::Load() {
 
   if (!exists(configPath)) {
     // 创建并打开文件
-    ofstream newFile(configPath);
+    ofstream newFile(configPath, ios::binary);
 
     // 检查文件是否成功打开
     if (!newFile.is_open()) {
@@ -39,24 +39,7 @@ unordered_map<WORD, Array<WORD>> Config::Load() {
           wh);
     } else {
       newFile << "\xEF\xBB\xBF";  // 写入 UTF-8 BOM
-      newFile << U8("# UmbralKeys 配置（'#'开头表示注释）\n");
-      newFile << U8(
-          "# UmbralKeys key mapping configuration ('#' means comment) \n");
-      newFile << U8("# \n");
-      newFile << U8("# 格式：origin=umbral1+umbral2+...\n");
-      newFile << U8("# Format：origin=umbral1+umbral2+...\n");
-      newFile << U8("# \n");
-      newFile << U8("# 大小写都是可以的\n");
-      newFile << U8("# Upper case or lower case matters not \n");
-      newFile << U8("# \n");
-      newFile << U8("# 不同按键和加号之间带有空格也是可以的\n");
-      newFile << U8("# Spaces between key names and plus signs are allowed \n");
-      newFile << U8("# \n");
-      newFile << U8("# 下方的两个配置案例等价\n");
-      newFile << U8("# Two configurations bellow are equivalent\n");
-      newFile << U8("# \n");
-      newFile << U8("# capslock=ctrl+space\n");
-      newFile << U8("# CapsLock = Ctrl + Space\n");
+      newFile << string(I18N::Get(UK_CONFIG_ZH, UK_CONFIG_EN)) << endl;
       Logger::MsgBox(I18N{
           L"config."
           L"txt已经新建，现将开启config."
@@ -84,8 +67,9 @@ unordered_map<WORD, Array<WORD>> Config::Load() {
         static_cast<unsigned char>(line[2]) == 0xBF) {
       line = line.substr(3);  // 去掉 BOM
     }
-    // 跳过空行和注释行
-    if (line.at(0) == '#' || line.length() == 0) {
+
+    // 跳过空行和注释行，判定为空必须在前，否则越界崩溃
+    if (line.length() == 0 || line.at(0) == '#') {
       continue;
     }
 

@@ -1,19 +1,5 @@
 #include "tray.h"
 
-//void LoadConfig() { UmbralKey::ApplyConfig(Config::Load()); }
-
-//void InitializeUmbras() {
-//  I18N::Initialize();
-//  LoadConfig();
-//  UmbralKey::InitializeKeyboardHook();
-//
-//  wstring info = I18N::Get(
-//      L"影键（UmbralKeys）启动成功！可以右键点击系统托盘图标查看菜单\n\n",
-//      L"UmbralKeys is launched! Right click the tray icon to view menu\n\n");
-//  info.append(UmbralKey::ViewUmbras());
-//  Logger::MsgBox(info.c_str());
-//}
-
 // 菜单项回调函数
 void UpdateMenuItemState(HMENU hMenu, UINT itemID, bool isDisabled) {
   // 更新菜单项勾选状态
@@ -25,9 +11,23 @@ void UpdateMenuItemState(HMENU hMenu, UINT itemID, bool isDisabled) {
              isDisabled ? L"影键已启用" : L"影键已禁用");
 }
 
+void InitializeUmbras() {
+  I18N::Initialize();
+  LoadConfig();
+  UmbralKey::InitializeKeyboardHook();
+
+  wstring info = I18N::Get(
+      L"影键（UmbralKeys）启动成功！可以右键点击系统托盘图标查看菜单\n\n",
+      L"UmbralKeys is launched! Right click the tray icon to view menu\n\n");
+  info.append(UmbralKey::ViewUmbras());
+  Logger::MsgBox(info.c_str());
+}
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
                          LPARAM lParam) {
   static TrayManager tray;
+  HINSTANCE hInstance = (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE);
+
   wstring msg;
   switch (message) {
     case WM_CREATE:
@@ -41,7 +41,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
           Logger::MsgBox(msg.c_str());
           break;
         case MenuItem::EDIT_CONFIG:
-          Config::OpenConfigFile();
+          //Config::OpenConfigFile();
+          //ShowConfigEditorWindow(hInstance);
+          DialogBox(GetModuleHandle(NULL),               // 应用实例句柄
+                    MAKEINTRESOURCE(IDD_CONFIG_DIALOG),  // 对话框资源 ID
+                    hWnd,                                // 父窗口句柄
+                    ConfigEditorProc                     // 对话框过程函数
+          );
+          Logger::MsgBox(L"阻塞的");
           break;
         case MenuItem::RELOAD:
           LoadConfig();
