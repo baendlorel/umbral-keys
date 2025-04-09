@@ -161,3 +161,19 @@ wstring stow(const string &str) {
   wstr.pop_back();  // ÒÆ³ý¶îÍâµÄ null ×Ö·û
   return wstr;
 }
+
+void centerWindow(HWND hwnd) {
+  RECT rc;
+  GetWindowRect(hwnd, &rc);
+
+  int winWidth = rc.right - rc.left;
+  int winHeight = rc.bottom - rc.top;
+
+  int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+  int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+  int x = (screenWidth - winWidth) / 2;
+  int y = (screenHeight - winHeight) / 2;
+
+  MoveWindow(hwnd, x, y, winWidth, winHeight, TRUE);
+}

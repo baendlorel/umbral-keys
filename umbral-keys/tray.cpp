@@ -28,6 +28,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
   static TrayManager tray;
   HINSTANCE hInstance = (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE);
 
+
+  INT_PTR ret;
   wstring msg;
   switch (message) {
     case WM_CREATE:
@@ -43,11 +45,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
         case MenuItem::EDIT_CONFIG:
           //Config::OpenConfigFile();
           //ShowConfigEditorWindow(hInstance);
-          DialogBox(GetModuleHandle(NULL),               // 应用实例句柄
-                    MAKEINTRESOURCE(IDD_CONFIG_DIALOG),  // 对话框资源 ID
-                    hWnd,                                // 父窗口句柄
-                    ConfigEditorProc                     // 对话框过程函数
-          );
+          //DialogBox(GetModuleHandle(NULL),               // 应用实例句柄
+          //          MAKEINTRESOURCE(IDD_CONFIG_DIALOG),  // 对话框资源 ID
+          //          hWnd,                                // 父窗口句柄
+          //          ConfigEditorProc                     // 对话框过程函数
+          //);
+          ret = DialogBox(hInstance,
+                          MAKEINTRESOURCE(IDD_CONFIG_EDITOR),
+                                  hWnd,
+                    ConfigEditorProc);
+          if (ret == -1) {
+            DWORD err = GetLastError();  // 获取详细错误信息
+            wchar_t buf[256];
+            wsprintf(buf, L"Error code: %lu", err);
+            MessageBox(NULL, buf, L"GetLastError", MB_OK);
+          }
+
           Logger::MsgBox(L"阻塞的");
           break;
         case MenuItem::RELOAD:

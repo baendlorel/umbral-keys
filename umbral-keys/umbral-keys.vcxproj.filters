@@ -98,6 +98,9 @@
     <ClInclude Include="ConfigEditor.h">
       <Filter>头文件\windows</Filter>
     </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md">
